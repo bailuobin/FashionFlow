@@ -9,6 +9,7 @@
 <title>FashionFlow</title>
 <link href="css/bootstrap.css" rel="stylesheet" media="all"/>
 <script src="js/angular.min.js"></script>
+<script src="js/angular-route.min.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
@@ -30,6 +31,8 @@
                 <img src="img/logo.svg" />
             </div>
             <div class="login myglow">Login</div>
+            <div class="sign-up myglow">SignUp</div>
+            <div class="show-user myglow">Username</div>
             <div class="welcome">
                 <p>Welcome to FashionFlow</p>
                 <div class="sub">
@@ -41,23 +44,48 @@
         </div>
     </div>
 
-    <div id="dialog-form" title="Tell me who are you" ng-controller="LoginCtrl">
-        <p class="validateTips">All fields are required.</p>
+    <!-- LOGIN DIALOG -->
+    <div id="my-login-dialog-form" title="Tell me who are you" ng-controller="LoginCtrl">
+        <p class="validateTips">{{ hintForLogin }}</p>
 
         <form class="my-login-form" action="/login" method="post">
             <fieldset>
                 <label for="email">Username(email)</label>
-                <input type="text" name="email" id="email" value="" class="text ui-widget-content ui-corner-all" ng-model="user.username">
+                <input type="text" name="email" id="email" value="" class="text ui-widget-content ui-corner-all" ng-model="userLogin.username">
                 <label for="password">Password</label>
-                <input type="password" name="password" id="password" value="" class="text ui-widget-content ui-corner-all" ng-model="user.password">
+                <input type="password" name="password" id="password" value="" class="text ui-widget-content ui-corner-all" ng-model="userLogin.password">
 
-                <input type="submit" value="Login" class="my-btn-login">
+                <!-- <input type="submit" value="Login" class="my-btn-login"> -->
+                <button class="my-btn-login" ng-click="login()">Login</button>
+                
                        
                 <!-- Allow form submission with keyboard without duplicating the dialog button -->
                 <input type="submit" tabindex="-1" style="position: absolute; top: -1000px">
             </fieldset>
         </form>
-     </div>
+    </div>
+
+
+    <!-- SIGN UP DIALOG -->
+    <div id="my-signup-dialog-form" title="Join us now" ng-controller="LoginCtrl">
+        <p class="validateTips">{{ hintForSignup }}</p>
+
+        <form class="my-signup-form" >
+            <fieldset>
+                <label for="email">Username(email)</label>
+                <input type="text" name="email" id="email" value="" class="text ui-widget-content ui-corner-all" ng-model="userSignup.username">
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" value="" class="text ui-widget-content ui-corner-all" ng-model="userSignup.password">
+                <label for="password">Confirm Password</label>
+                <input type="password" name="c-password" id="c-password" value="" class="text ui-widget-content ui-corner-all" ng-model="cpassword">
+
+                <button class="my-btn-signup" ng-click="signup()">Submit</button>
+                       
+                <!-- Allow form submission with keyboard without duplicating the dialog button -->
+                <input type="submit" tabindex="-1" style="position: absolute; top: -1000px">
+            </fieldset>
+        </form>
+    </div>
 
     
     <div class="products">

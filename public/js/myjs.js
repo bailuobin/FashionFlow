@@ -5,7 +5,9 @@ $(window).load(function () {
 
 $(document).ready(function () {
 
-    var dialog, form,
+            $(".navigation .show-user").hide();// hide the username label before user login
+
+            var loginDialog, loginForm, signupDialog, signupForm,
 
               // From http://www.whatwg.org/specs/web-apps/current-work/multipage/states-of-the-type-attribute.html#e-mail-state-%28type=email%29
               emailRegex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/,
@@ -65,7 +67,8 @@ $(document).ready(function () {
                 return valid;
             }*/
 
-            dialog = $("#dialog-form").dialog({
+            //building dialog for login
+            loginDialog = $("#my-login-dialog-form").dialog({
                 autoOpen: false,
                 height: 450,
                 width: 600,
@@ -77,18 +80,51 @@ $(document).ready(function () {
                     }
                 },*/
                 close: function () {
-                    form[0].reset();
+                    loginForm[0].reset();
                     allFields.removeClass("ui-state-error");
                 }
             });
 
-            /*form = dialog.find("form").on("submit", function (event) {
+            loginForm = loginDialog.find("form").on("submit", function (event) {
                 event.preventDefault();
-                addUser();
-            });*/
+                //addUser();
+            });
 
             $(".navigation .login").click(function () {
-                dialog.dialog("open");
+                loginDialog.dialog("open");
             }); 
+
+
+            //building dialog for sign up
+            signupDialog = $("#my-signup-dialog-form").dialog({
+                autoOpen: false,
+                height: 500,
+                width: 600,
+                modal: true,
+                /*buttons: {
+                    "Submit": addUser,
+                    Cancel: function () {
+                        dialog.dialog("close");
+                    }
+                },*/
+                close: function () {
+                    signupForm[0].reset();
+                    allFields.removeClass("ui-state-error");
+                }
+            });
+
+            signupForm = signupDialog.find("form").on("submit", function (event) {
+                event.preventDefault();
+                //addUser();
+            });
+
+            $(".navigation .sign-up").click(function () {
+                signupDialog.dialog("open");
+            }); 
+
+
+            
+
+
 
 });

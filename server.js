@@ -17,6 +17,7 @@ if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
   process.env.OPENSHIFT_APP_NAME;
 }
 var db = mongojs(mongodbConnectionString, ["applications"]);
+var usersCollection = db.collection('users');
 
 var ipaddress = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
 var port      = process.env.OPENSHIFT_NODEJS_PORT || 8080;
@@ -37,12 +38,16 @@ app.configure(function() {
 passport.use(new LocalStrategy(
 
   {
-    usernameField: 'email',
-    passwordField: 'password'
+    //usernameField: 'email',
+    //passwordField: 'password'
+    passReqToCallback: true
   },
 
-  function(username, password, done) {
-    var usersCollection = db.collection('users');
+  function(req, username, password, done) {
+    var username = req.body.username;
+    var password = req.body.password;
+
+
     
     usersCollection.findOne({ username: username }, function(err, user) {
       if (err) { return done(err); }
@@ -71,17 +76,27 @@ passport.deserializeUser(function(user, done) {
 
 //=====================================================
 
-app.get("/hello", function(req, res){
-    res.send("Hello World!");
+
+
+app.get("/get_current_user", function(req, res){
+    res.send(req.user);
 });
 
-
-
-
 app.post('/login',
-  passport.authenticate('local', { successRedirect: '/hello',
+  passport.authenticate('local', { successRedirect: '/loginsuccess',
                                    failureRedirect: '/'})
 );
+
+app.get("/loginsuccess", function(req, res){
+    //res.send("Hello World!");
+    res.send("loginSuccess");
+});
+
+app.post("/signup", function (req, res) {
+        usersCollection.insert(req.body, function (err, doc) {
+            res.json(doc);
+        });
+    });
 
 
 /*

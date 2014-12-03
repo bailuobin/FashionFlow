@@ -51,6 +51,25 @@ top: 50px;
 cursor: pointer;
 }
 
+.cover .sign-up{  
+color: white;
+font-size: 30px;
+right: 160px;
+position: absolute;
+top: 50px;
+cursor: pointer;
+}
+
+.cover .show-user{  
+color: white;
+font-size: 30px;
+right: 160px;
+position: absolute;
+top: 50px;
+cursor: pointer;
+}
+
+
 .myglow {
   display: inline-block;
   -webkit-transition-duration: 0.2s;
@@ -90,6 +109,10 @@ color: white;
 font-size: 20px;
 margin-left: auto;
 margin-right: auto;
+}
+
+.products .row{
+margin:0px;
 }
 
 .products .row .column{
@@ -220,6 +243,17 @@ font-size: 20px;
 }
 
 .my-login-form button{
+background: #946EA7;
+border: 1px solid #946EA7;
+color: #ffffff;
+border-radius: 5px;
+padding: 6px 40px;
+font-family: HelveticaNeueUltLt;
+font-size: 24px;
+margin-top: 15px;
+}
+
+.my-signup-form button{
 background: #946EA7;
 border: 1px solid #946EA7;
 color: #ffffff;
