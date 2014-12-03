@@ -1,0 +1,232 @@
+@font-face {
+    font-family: 'HelveticaNeue';
+    src: 
+    url('../fonts/Helvetica Neue.eot'), 
+    url('../fonts/Helvetica Neue.woff'), 
+    url('../fonts/Helvetica Neue.otf'), 
+    url('../fonts/Helvetica Neue.ttf');
+}
+
+@font-face {
+    font-family: 'HelveticaNeueTh';
+    src: 
+    url('../fonts/HelveticaNeueLTPro-Th.eot'), 
+    url('../fonts/HelveticaNeueLTPro-Th.woff'), 
+    url('../fonts/HelveticaNeueLTPro-Th.otf'), 
+    url('../fonts/HelveticaNeueLTPro-Th.ttf');
+}
+
+@font-face {
+    font-family: 'HelveticaNeueUltLt';
+    src: 
+    url('../fonts/HelveticaNeueLTPro-UltLt.eot'), 
+    url('../fonts/HelveticaNeueLTPro-UltLt.woff'), 
+    url('../fonts/HelveticaNeueLTPro-UltLt.otf'), 
+    url('../fonts/HelveticaNeueLTPro-UltLt.ttf');
+}
+
+body{
+font-family: HelveticaNeueUltLt;
+}
+
+.navigation{
+position: relative;
+height: 500px;
+overflow: hidden;
+}
+
+.navigation .cover{
+width: 100%;
+height: 100%;
+position: absolute;
+top: 0;
+}
+
+.cover .login{	
+color: white;
+font-size: 30px;
+right: 50px;
+position: absolute;
+top: 50px;
+cursor: pointer;
+}
+
+.myglow {
+  display: inline-block;
+  -webkit-transition-duration: 0.2s;
+  transition-duration: 0.2s;
+  -webkit-transition-property: text-shadow;
+  transition-property: text-shadow;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  text-shadow: 0 0 0px rgba(255, 255, 255, 0);
+}
+.myglow:hover, .myglow:focus, .myglow:active {
+text-shadow: 0 0 10px rgba(255, 255, 255, 1);
+}
+
+.cover .logo{
+margin-left: 10px;
+margin-top: 10px;
+}
+
+.cover .logo img{
+width:120px;
+}
+
+.cover .welcome{
+width: 100%;
+margin-top: 90px;
+text-align: center;
+color: white;
+font-size: 50px;
+}
+
+.cover .welcome .sub{
+width: 35%;
+margin-top: 90px;
+text-align: left;
+color: white;
+font-size: 20px;
+margin-left: auto;
+margin-right: auto;
+}
+
+.products .row .column{
+display:inline-block;
+width: 33%;
+height: 400px;
+border: 1px solid;
+}
+
+/************for login form*******************/
+.ui-widget-overlay{
+background: #2B1536;
+opacity: 0.8;
+}
+
+.ui-widget-header{
+background: #ffffff;
+color: #946EA7;
+border: 0px;
+font-size: 40px;
+font-family: HelveticaNeueUltLt;
+}
+
+.ui-widget-header button[title="Close"]{
+background: #ffffff;
+border: 0px;
+color: #946EA7;
+}
+
+label, input {
+display: block;
+}
+
+input.text {
+margin-bottom: 12px;
+width: 95%;
+padding: .4em;
+}
+
+fieldset {
+padding: 0;
+border: 0;
+margin-top: 25px;
+}
+
+h1 {
+font-size: 1.2em;
+margin: .6em 0;
+}
+
+div#users-contain {
+width: 350px;
+margin: 20px 0;
+}
+
+div#users-contain table {
+margin: 1em 0;
+border-collapse: collapse;
+width: 100%;
+}
+
+div#users-contain table td, div#users-contain table th {
+border: 1px solid #eee;
+padding: .6em 10px;
+text-align: left;
+}
+
+.ui-dialog .ui-state-error {
+padding: .3em;
+}
+
+.validateTips {
+border: 1px solid transparent;
+padding: 0.3em;
+}
+
+label, input {
+display: block;
+}
+
+input.text {
+margin-bottom: 12px;
+width: 95%;
+padding: .4em;
+}
+
+fieldset {
+padding: 0;
+border: 0;
+margin-top: 25px;
+}
+
+h1 {
+font-size: 1.2em;
+margin: .6em 0;
+}
+
+div#users-contain {
+width: 350px;
+margin: 20px 0;
+}
+
+div#users-contain table {
+margin: 1em 0;
+border-collapse: collapse;
+width: 100%;
+}
+
+div#users-contain table td, div#users-contain table th {
+border: 1px solid #eee;
+padding: .6em 10px;
+text-align: left;
+}
+
+.ui-dialog .ui-state-error {
+padding: .3em;
+}
+
+.validateTips {
+border: 1px solid transparent;
+padding: 0.3em;
+}
+
+.my-login-form{
+font-family: HelveticaNeueUltLt;
+color: #946EA7;
+font-size: 20px;
+}
+
+.my-login-form button{
+background: #946EA7;
+border: 1px solid #946EA7;
+color: #ffffff;
+border-radius: 5px;
+padding: 6px 40px;
+font-family: HelveticaNeueUltLt;
+font-size: 24px;
+margin-top: 15px;
+}
+

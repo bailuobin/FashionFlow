@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="88px" height="88px" viewBox="0 0 88 88" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.1.1 (8761) - http://www.bohemiancoding.com/sketch -->
+    <title>Logo</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Main-page-" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="Artboard-1" sketch:type="MSArtboardGroup" transform="translate(-4.000000, -4.000000)">
+            <g id="Navigation" sketch:type="MSLayerGroup" transform="translate(-6.000000, -76.000000)">
+                <g id="Logo" transform="translate(10.000000, 80.000000)" sketch:type="MSShapeGroup">
+                    <rect id="Rectangle-5" fill="#342F37" x="0" y="0" width="88" height="88"></rect>
+                    <path d="M22.6,66.4 L22.6,81 L8,81 L8,15.3 L8,8 L81,8 L81,22.6 L66.4,22.6 L66.4,51.8 L81,51.8 L81,66.4 L66.4,66.4 L66.4,81 L51.8,81 L51.8,66.4 L22.6,66.4 Z M22.6,51.8 L22.6,22.6 L51.8,22.6 L51.8,51.8 L22.6,51.8 Z" id="logo-2" fill="#946EA7"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
