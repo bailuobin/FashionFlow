@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+
+<html lang="en" ng-app="FashionFlow">
+
+<head>
+
+<meta charset='utf-8' />
+
+<title>FashionFlow</title>
+<link href="css/bootstrap.css" rel="stylesheet" media="all"/>
+<script src="js/angular.min.js"></script>
+<script src="js/angular-route.min.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+
+
+<script src="js/myjs.js"></script>
+<script src="js/app.js"></script>
+<script src="features/services/controller.js"></script>
+<link href="css/mycss.css" rel="stylesheet" media="all">
+<link href="css/mycss-design-detail.css" rel="stylesheet" media="all">
+
+</head>
+
+<body ng-controller="DesignDetailCtrl">
+
+    <div class="navigation-s">
+        <div class="logo-s">
+            <img src="img/logo-s.svg" />
+        </div>
+        
+        <div class="men-label myglow-p" ng-click="">Men</div>
+        <div class="women-label myglow-p" ng-click="">Women</div>
+        <div class="uni-label myglow-p" ng-click="">Uni</div>
+        <div class="username-label myglow-p" ng-click="goAccount()"></div>
+        <div class="shopping-cart">
+            <div class="icon col-md-4"><img src="img/shopping-purse-purple.svg"></div>
+            <div class="container col-md-6">
+                <span class="items">1 item(s)</span>
+                <span class="sum">$ 100</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="detail">
+        
+        <img class="preview col-md-4" src="">
+        <div class="control col-md-6">
+            <div class="row-container col-md-12">
+                <h1>Ends at: </h1>
+                <div class="time-left"></div>
+            </div>
+            <div class="row-container">
+                <div class="col-md-6">
+                    <h1>Current Minimun: </h1>
+                    <div class="minimum"></div>
+                </div>
+                <div class="col-md-6">
+                    <h1>Current Winner: </h1>
+                    <div class="current-winner"></div>
+                </div>
+                
+            </div>
+            <div class="row-container col-md-12 stuff-to-hide-bidding">
+                <h1 >Your bid: </h1>
+                <input type="text" class="your-bid form-control text ui-widget-content ui-corner-all " ng-model="yourBid">
+            </div>
+            <div class="row-container col-md-12 stuff-to-hide-bidding">
+                <div class="bid-btn myglow-p-box col-md-6" ng-click="bid()">Bid Now</div>
+                <div class="hint col-md-6" >{{hintForBidding}}</div>
+            </div>
+        </div>
+
+
+        
+        <div class="description col-md-12">
+            <h1>Description</h1>
+            <p></p>
+        </div>
+    </div>
+
+    <div class="loader">
+    
+    </div> 
+
+</body>
+</html>

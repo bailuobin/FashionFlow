@@ -22,7 +22,7 @@
 
 </head>
 
-<body>
+<body ng-controller="IndexCtrl">
 
     <div class="navigation">
         <img src="img/web final project navi bg .png"/>
@@ -32,7 +32,8 @@
             </div>
             <div class="login myglow">Login</div>
             <div class="sign-up myglow">SignUp</div>
-            <div class="show-user myglow">Username</div>
+            <div class="show-user myglow"></div>
+            <div class="logout myglow" ng-click="logout()">Logout</div>
             <div class="welcome">
                 <p>Welcome to FashionFlow</p>
                 <div class="sub">
@@ -45,7 +46,7 @@
     </div>
 
     <!-- LOGIN DIALOG -->
-    <div id="my-login-dialog-form" title="Tell me who are you" ng-controller="LoginCtrl">
+    <div id="my-login-dialog-form" title="Tell me who are you" >
         <p class="validateTips">{{ hintForLogin }}</p>
 
         <form class="my-login-form" action="/login" method="post">
@@ -67,7 +68,7 @@
 
 
     <!-- SIGN UP DIALOG -->
-    <div id="my-signup-dialog-form" title="Join us now" ng-controller="LoginCtrl">
+    <div id="my-signup-dialog-form" title="Join us now">
         <p class="validateTips">{{ hintForSignup }}</p>
 
         <form class="my-signup-form" >
@@ -88,18 +89,11 @@
     </div>
 
     
-    <div class="products">
-        <div class="row">
-            <div class="column"></div>
-            <div class="column"></div>
-            <div class="column"></div>
-        </div>
-        <div class="row">
-            <div class="column"></div>
-            <div class="column"></div>
-            <div class="column"></div>
-        </div>
+    <div class="recent-products">
+
     </div>
+
+    <div class="see-more-index" ng-click="goDisplay()">more</div>
 
     <div class="loader">
     

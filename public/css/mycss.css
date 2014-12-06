@@ -29,6 +29,19 @@ body{
 font-family: HelveticaNeueUltLt;
 }
 
+.loader{
+position:fixed;
+top:0;
+width:100%;
+background-color:#ffffff;
+height:100%;
+text-align:center;
+margin:0;
+padding:0;
+overflow:hidden;
+}
+
+/***** for main page *****/
 .navigation{
 position: relative;
 height: 500px;
@@ -63,9 +76,18 @@ cursor: pointer;
 .cover .show-user{  
 color: white;
 font-size: 30px;
-right: 160px;
+right: 200px;
 position: absolute;
 top: 50px;
+cursor: pointer;
+}
+
+.cover .logout{  
+color: white;
+font-size: 18px;
+right: 60px;
+position: absolute;
+top: 60px;
 cursor: pointer;
 }
 
@@ -83,6 +105,36 @@ cursor: pointer;
 .myglow:hover, .myglow:focus, .myglow:active {
 text-shadow: 0 0 10px rgba(255, 255, 255, 1);
 }
+
+.myglow-p {
+  display: inline-block;
+  -webkit-transition-duration: 0.2s;
+  transition-duration: 0.2s;
+  -webkit-transition-property: text-shadow;
+  transition-property: text-shadow;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  text-shadow: 0 0 0px rgba(148, 110, 167, 0);
+}
+.myglow-p:hover, .myglow:focus, .myglow:active {
+text-shadow: 0 0 10px rgba(148, 110, 167, 1);
+}
+
+.myglow-p-box {
+  display: inline-block;
+  -webkit-transition-duration: 0.2s;
+  transition-duration: 0.2s;
+  -webkit-transition-property: text-shadow;
+  transition-property: box-shadow;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  box-shadow: 0 0 0px rgba(148, 110, 167, 0);
+}
+.myglow-p-box:hover, .myglow:focus, .myglow:active {
+box-shadow: 0 0 5px rgba(148, 110, 167, 0.7);
+}
+
+
 
 .cover .logo{
 margin-left: 10px;
@@ -111,18 +163,357 @@ margin-left: auto;
 margin-right: auto;
 }
 
-.products .row{
-margin:0px;
+.recent-products{
+margin-left: 32px;
+overflow: hidden;
 }
 
-.products .row .column{
-display:inline-block;
-width: 33%;
+.recent-products .item{
+display: inline-block;
+width: 400px;
 height: 400px;
-border: 1px solid;
+background: #dedede;
+margin-left: 38px;
+margin-top: 26px;
+box-shadow: 0px 0px 2px #cccccc;
+cursor:pointer;
 }
 
-/************for login form*******************/
+.see-more-index{
+float:right;
+margin: 30px 40px;
+font-size: 28px;
+color:#946EA7; 
+cursor:pointer;
+} 
+
+/****************************** for account page ****************************/
+.navigation-s{
+height: 100px;
+position: relative;
+box-shadow: 0px 0px 3px #888888;
+}
+
+.navigation-s .logo-s{
+display: inline-block;
+margin-left: 20px;
+margin-top: 20px;
+cursor: pointer;
+
+}
+
+.navigation-s .username-label-s{
+display: inline-block;
+position: absolute;
+top: 29px;
+left: 130px;
+font-size: 30px;
+color:#946EA7;
+}
+
+.navigation-s .designer-label-s{
+display: inline-block;
+position: absolute;
+top: 29px;
+right: 530px;
+font-size: 30px;
+color:#946EA7;
+cursor: pointer;
+}
+
+.navigation-s .designer-label-s-choosen{
+display: inline-block;
+position: absolute;
+top: 19px;
+right: 500px;
+font-size: 30px;
+color: white;
+background: #946EA7;
+border-radius: 30px;
+padding: 10px 30px;
+}
+
+.navigation-s .buyer-label-s{
+display: inline-block;
+position: absolute;
+right: 300px;
+top: 29px;
+font-size: 30px;
+color:#946EA7;
+cursor: pointer;
+}
+
+.navigation-s .buyer-label-s-choosen{
+display: inline-block;
+position: absolute;
+right: 270px;
+top: 19px;
+font-size: 30px;
+color:white;
+background: #946EA7;
+border-radius: 30px;
+padding: 10px 30px;
+}
+
+.navigation-s .shopping-cart{
+display: inline-block;
+position: absolute;
+height: 100%;
+right: 20px;
+}
+
+.shopping-cart .icon{
+height: 100%;
+}
+
+.shopping-cart .icon img {
+width: 25px;
+margin-top: 36px;
+}
+
+.shopping-cart .container{
+margin-top: 30px;
+}
+
+
+.ongoing-general{
+}
+
+.ongoing-general .title{
+margin: 40px 60px;
+font-size: 40px;
+color: #946EA7;
+display: inline-block;
+}
+
+.ongoing-general .upload{
+cursor:pointer;
+}
+
+.ongoing-general .triangle{
+float: right;
+cursor: pointer;
+margin: 0px;
+margin-top: 42px;
+margin-right: 20px;
+}
+
+.ongoing-general .triangle-up{
+float: right;
+cursor: pointer;
+margin: 0px;
+margin-top: 42px;
+margin-right: 20px;
+}
+
+.ongoing-general .see-more{
+float: right;
+font-size: 20px;
+margin: 0px;
+margin-top: 58px;
+margin-right: 60px;
+}
+
+
+/******************************* Crop it part **********************************/
+.image-editor{
+font-family: HelveticaNeueUltLt;
+}
+
+.image-editor .column {
+display: inline-block;
+}
+
+.image-choosen .column{
+display: inline-block;  
+}
+
+
+.cropit-image-preview {
+background-color: #f8f8f8;
+background-size: cover;
+border: 1px solid #ccc;
+border-radius: 3px;
+margin-top: 50px;
+width: 400px;
+height: 400px;
+cursor: move;
+}
+
+.cropit-image-background {
+    opacity: .2;
+    cursor: auto;
+}
+
+input[type=range] {
+    /*removes default webkit styles*/
+    -webkit-appearance: none;
+    /*fix for FF unable to apply focus style bug */
+    border: 1px solid white;
+    /*required for proper track sizing in FF*/
+    width: 300px;
+}
+
+    input[type=range]::-webkit-slider-runnable-track {
+        width: 300px;
+        height: 6px;
+        background: #ddd;
+        border: none;
+        border-radius: 3px;
+    }
+
+    input[type=range]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        border: none;
+        height: 16px;
+        width: 16px;
+        border-radius: 50%;
+        background: #52a0c7;
+        margin-top: -5px;
+    }
+
+input.cropit-image-input {
+    visibility: hidden;
+    width: 50px;
+}
+
+.select-image-btn {
+cursor: pointer;
+background: #946EA7;
+border: 1px solid #946EA7;
+color: #ffffff;
+border-radius: 5px;
+padding: 6px 40px;
+font-size: 24px;
+margin-top: 15px;
+margin-top: 49px;
+text-align: center;
+}
+
+.save-image-btn {
+cursor: pointer;
+background: #A8DF70;
+border: 1px solid #A8DF70;
+color: #ffffff;
+border-radius: 5px;
+padding: 6px 40px;
+font-size: 24px;
+margin-top: 15px;
+text-align: center;
+}
+
+/* Translucent background image */
+.cropit-image-background {
+    opacity: .2;
+}
+
+/*
+ * If the slider or anything else is covered by the background image,
+ * use relative or absolute position on it
+ */
+input.cropit-image-zoom-input {
+    position: relative;
+    margin-bottom: 50px;
+}
+
+/* Limit the background image by adding overflow: hidden */
+#image-cropper {
+    overflow: hidden;
+}
+
+.image-choosen-preview{
+background-color: #f8f8f8;
+background-size: cover;
+border: 1px solid #ccc;
+border-radius: 3px;
+margin-top: 50px;
+width: 400px;
+height: 400px;
+cursor: move;
+}
+
+.edit-image-btn{
+cursor: pointer;
+background: #946EA7;
+border: 1px solid #946EA7;
+color: #ffffff;
+border-radius: 5px;
+padding: 6px 40px;
+font-size: 24px;
+margin-top: 15px;
+margin-top: 49px;
+text-align: center; 
+}
+/*******************************End of Crop it part **********************************/
+
+.ongoing-general .items{
+padding-left: 75px;
+height: 257px;
+overflow: hidden;
+}
+
+.ongoing-general .items .item{
+width: 250px;
+height: 250px;
+background: #cccccc;
+display: inline-block;
+margin: 5px 5px;
+cursor:pointer;
+box-shadow: 0px 0px 2px #cccccc;
+}
+
+
+.history-general{
+height: 350px;
+margin-top: 150px;
+}
+
+.history-general .title{
+margin: 40px 60px;
+font-size: 40px;
+color: #946EA7;
+}
+
+.history-general .triangle{
+float: right;
+cursor: pointer;
+margin: 0px;
+margin-top: 42px;
+margin-right: 20px;
+}
+
+.history-general .triangle-up{
+float: right;
+cursor: pointer;
+margin: 0px;
+margin-top: 42px;
+margin-right: 20px;
+}
+
+.history-general .see-more{
+float: right;
+font-size: 20px;
+margin: 0px;
+margin-top: 58px;
+margin-right: 60px;
+}
+
+
+
+
+.history-general .items{
+ padding-left: 75px;
+}
+
+.history-general .items .item{
+width: 250px;
+height: 250px;
+background: #cccccc;
+display: inline-block;
+}
+/*******************************End of Account page **********************************/
+
+/************for login and other forms*******************/
 .ui-widget-overlay{
 background: #2B1536;
 opacity: 0.8;
@@ -262,5 +653,91 @@ padding: 6px 40px;
 font-family: HelveticaNeueUltLt;
 font-size: 24px;
 margin-top: 15px;
+}
+
+.my-upload-form{
+font-family: HelveticaNeueUltLt;
+}
+
+.upload-feature-container{
+margin-top: 20px;
+}
+
+.upload-feature-container .upload-title{
+margin-left: 30px;
+font-size: 30px;
+}
+
+.upload-feature-container input[name="name"]{
+margin-left: 31px;
+width: 70%;
+}
+
+.upload-feature-container textarea{
+ margin: 0px 0px 0px 31px;
+width: 70%;
+height: 100px;
+}
+
+.upload-feature-container .dropdown{
+margin-left: 31px;
+}
+
+.upload-feature-container .dropdown ul li{
+display: block;
+padding: 3px 20px;
+clear: both;
+font-weight: normal;
+line-height: 1.42857143;
+color: #333;
+white-space: nowrap;
+}
+
+.upload-feature-container .dropdown ul li:hover{
+background: #f1f1f1;
+}
+
+
+.upload-feature-container .minimum-price{
+margin-left: 31px;
+width:70%;
+}
+
+.upload-feature-container .time-left{
+margin-left: 31px;
+width:20%;
+
+}
+
+.upload-feature-container .upload-btn{
+background: #946EA7;
+border: 1px solid #946EA7;
+color: #ffffff;
+border-radius: 5px;
+padding: 6px 40px;
+font-family: HelveticaNeueUltLt;
+font-size: 24px;
+margin-top: 15px;
+display: inline-block;
+width: 20%;
+margin-left:31px;
+text-align: center;
+cursor: pointer;
+}
+
+.upload-feature-container .cancel-btn{
+background: #cccccc;
+border: 1px solid #cccccc;
+color: #ffffff;
+border-radius: 5px;
+padding: 6px 40px;
+font-family: HelveticaNeueUltLt;
+font-size: 24px;
+margin-top: 15px;
+display: inline-block;
+width: 20%;
+margin-left:15px;
+text-align: center;
+cursor: pointer;
 }
 

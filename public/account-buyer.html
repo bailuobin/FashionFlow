@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+
+<html lang="en" ng-app="FashionFlow">
+
+<head>
+
+<meta charset='utf-8' />
+
+<title>FashionFlow</title>
+<link href="css/bootstrap.css" rel="stylesheet" media="all"/>
+<script src="js/angular.min.js"></script>
+<script src="js/angular-route.min.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+
+
+<script src="js/myjs.js"></script>
+<script src="js/app.js"></script>
+<script src="features/services/controller.js"></script>
+<link href="css/mycss.css" rel="stylesheet" media="all">
+
+</head>
+
+<body ng-controller="Account-BuyerCtrl">
+
+    <div class="navigation-s">
+        <div class="logo-s">
+            <img src="img/logo-s.svg" />
+        </div>
+        <div class="username-label-s "></div>
+        <div class="designer-label-s myglow-p" ng-click="goDesignerPage()">I'm a Designer</div>
+        <div class="buyer-label-s-choosen">I'm a Buyer</div>
+    </div>
+
+    <div class="ongoing-general">
+        <div class="title">On Going</div>
+        <div class="items">
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+        </div>
+    </div>
+
+    <div class="history-general">
+        <div class="title">History</div>
+        <div class="items">
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+            <div class="item"></div>
+        </div>
+    </div>
+
+    <div class="loader">
+    
+    </div> 
+
+</body>
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+
+<html lang="en" ng-app="FashionFlow">
+
+<head>
+
+<meta charset='utf-8' />
+
+<title>FashionFlow</title>
+<link href="css/bootstrap.css" rel="stylesheet" media="all"/>
+<script src="js/angular.min.js"></script>
+<script src="js/angular-route.min.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/bootstrap.js"></script>
+<script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+
+
+<script src="js/myjs.js"></script>
+<script src="js/app.js"></script>
+<script src="features/services/controller.js"></script>
+<link href="css/mycss.css" rel="stylesheet" media="all">
+
+<script src="js/jquery.cropit.js"></script>
+
+</head>
+
+<body ng-controller="Account-DesignerCtrl">
+
+    <div class="navigation-s">
+        <div class="logo-s" ng-click="Home()">
+            <img src="img/logo-s.svg" />
+        </div>
+        <div class="username-label-s"></div>
+        <div class="designer-label-s-choosen">I'm a Designer</div>
+        <div class="buyer-label-s myglow-p" ng-click="goBuyerPage()">I'm a Buyer</div>
+    </div>
+
+    <div class="ongoing-general">
+        <div class="title">Selling</div>
+        <div class="title upload myglow-p">Upload</div>       
+        <div class="items">
+            
+        </div>
+        <div class="title see-more">See More</div>
+        <div class="title myglow-p triangle" ng-click="expandItemsOnGoing()"><img src="img/triangle-purple.svg" style="width:22px;"></div>
+        <div class="title myglow-p triangle-up" ng-click="collapseItemsOnGoing()"><img src="img/triangle-purple-up.svg" style="width:22px;"></div>
+    </div>
+
+        <!-- SIGN UP DIALOG -->
+    <div id="my-upload-dialog-form" title="Upload your design" ng-controller="UploadCtrl">
+
+        <form class="my-upload-form" >
+            <fieldset>
+                <div class="upload-feature-container">
+                    <div class="upload-title">Image</div>
+                    <div class="image-editor">
+                        <div class="col-md-6">
+                            <div class="cropit-image-preview-container">
+                                <div class="cropit-image-preview"></div>
+                            </div>
+                            <input type="range" class="cropit-image-zoom-input" style="margin-top: 15px;"/>
+                            <input type="file" class="cropit-image-input" />
+                        </div>
+                        <div class="col-md-6" style="height: 550px;">
+                            <div class="select-image-btn">Select new image</div>
+                            <div class="save-image-btn" style="display:none;">OK</div>
+                        </div>
+                    </div>
+
+                    <script>
+                        $(function () {
+                            $('.image-editor').cropit(
+                                { imageBackground: true,
+                                  onImageLoaded: function(){
+                                    $('.save-image-btn').show();
+                                  }
+                                });
+
+                            // When user clicks select image button,
+                            // open select file dialog programmatically
+                            $('.select-image-btn').click(function () {
+                                $('.cropit-image-input').click();
+                            });
+
+
+
+                            $('.save-image-btn').click(function () {
+                                
+                                var img = $('.image-editor').cropit('export', {
+                                    type: 'image/png',
+                                    quality: .9,
+                                    originalSize: false
+                                });
+
+                                $('.image-editor').hide();                           
+                                $('.image-choosen-preview-container .image-choosen-preview').css('background', 'url(' + img + ')');
+                                $('.image-choosen').show();
+                                //window.location.href = img;
+                            });
+
+                            $('.edit-image-btn').click(function () {
+                                
+                                // var img = $('.image-editor').cropit('export', {
+                                //     type: 'image/png',
+                                //     quality: .9,
+                                //     originalSize: true
+                                // });
+
+                                $('.image-choosen').hide();                           
+                                //$('.image-choosen-preview-container image-choosen-preview').css('background', "scr:" + img);
+                                $('.image-editor').show();
+                                //window.location.href = img;
+                            });
+
+                            
+                        });
+                    </script>
+
+                    <div class="image-choosen"  style="display:none;">
+                        <div class="col-md-6">
+                            <div class="image-choosen-preview-container">
+                                <div class="image-choosen-preview"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6" style="height:500px;">
+                            <div class="edit-image-btn">Edit</div>
+                        </div>
+                    </div>             
+                </div>
+
+                <div class="upload-feature-container">
+                    <div class="upload-title">Name</div>
+                    <input type="text" name="name" class="form-control text ui-widget-content ui-corner-all" ng-model="designItem.name">
+                </div>
+
+                <div class="upload-feature-container">
+                    <div class="upload-title">Discription</div>
+                    <textarea class="form-control text ui-widget-content ui-corner-all" ng-model="designItem.discription" ng-model="designItem.discription"></textarea>
+                </div>
+
+                <div class="upload-feature-container">
+                    <div class="upload-title">Category</div>
+                    <div class="category dropdown">
+                      <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                        <span >Choose One</span>
+                        <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                        <li role="presentation">Beachwear</li>
+                        <li role="presentation">Coats</li>
+                        <li role="presentation">Dresses</li>                      
+                        <li role="presentation">Denim</li>
+                        <li role="presentation">Jackets</li>
+                        <li role="presentation">Knitwear</li>
+                        <li role="presentation">Lingerie</li>
+                        <li role="presentation">Polo shirts</li>
+                        <li role="presentation">Shirts</li>
+                        <li role="presentation">Skirts</li>
+                        <li role="presentation">Shorts</li>
+                        <li role="presentation">Suits</li>
+                        <li role="presentation">Sweaters and knitwear</li>
+                        <li role="presentation">Trousers</li>
+                        <li role="presentation">T-Shirts and vests</li>
+                        <li role="presentation">Underwear and socks</li>
+                      </ul>
+                    </div>
+
+                    <script>
+                        $('.dropdown-toggle').dropdown();
+                        $('.upload-feature-container .category ul li').click(function(){
+
+                            var value = $(this).text();
+
+                            $('.upload-feature-container #dropdownMenu1 span:eq(0)').text(value);
+
+                        });
+                    </script>
+                </div>
+
+                <div class="upload-feature-container">
+                    <div class="upload-title">Sex</div>
+                    <div class="sex dropdown">
+                      <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-expanded="true">
+                        <span >Choose One</span>
+                        <span class="caret"></span>
+                      </button>
+                      <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                        <li role="presentation">Men</li>
+                        <li role="presentation">Women</li>
+                        <li role="presentation">Uni</li>                      
+                      </ul>
+                    </div>
+
+                    <script>
+                        $('.dropdown-toggle').dropdown();
+                        $('.upload-feature-container .sex ul li').click(function(){
+
+                            var value = $(this).text();
+
+                            $('.upload-feature-container #dropdownMenu2 span:eq(0)').text(value);
+
+                        });
+                    </script>
+                </div>
+
+                <div class="upload-feature-container">
+                    <div class="upload-title">Minimum Price</div>
+                    <div class="minimum-price input-group">
+                        <span class="input-group-addon">$</span>
+                        <input type="text" name="min-price" class="form-control text ui-widget-content ui-corner-all" onKeyPress="return numbersonly(this, event)" ng-model="designItem.min_price">
+                    </div>
+
+                </div>
+                
+                <div class="upload-feature-container">
+                    <div class="upload-title">Time for bidding</div>
+                    <div class="time-left input-group">                   
+                        <input type="text" name="time-left" class="form-control text ui-widget-content ui-corner-all" onKeyPress="return numbersonly(this, event)" maxlength="4" ng-model="designItem.time_left">
+                        <span class="input-group-addon">hours</span>
+                    </div>
+                </div>
+
+                <div class="upload-feature-container" >
+                    <div class="upload-btn" ng-click="upload()">Upload</div>
+                    <div class="cancel-btn">Cancel</div>
+                </div>
+
+
+
+            </fieldset>
+        </form>
+    </div>
+
+
+    <div class="history-general">
+        <div class="title">History</div>
+        <div class="items">
+            <div class="row">
+            </div>
+
+            
+        </div>
+        <div class="title see-more">See More</div>
+        <div class="title myglow-p triangle" ng-click="expandItemsHistory()"><img src="img/triangle-purple.svg" style="width:22px;"></div>
+        <div class="title myglow-p triangle-up" ng-click="collapseItemsHistory()"><img src="img/triangle-purple-up.svg" style="width:22px;"></div>
+    </div>
+
+    <div class="loader">
+    
+    </div> 
+
+</body>
+</html>
