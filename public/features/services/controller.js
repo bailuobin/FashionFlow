@@ -117,17 +117,24 @@ app.controller(
         }
 
         $scope.signup = function () {
-            if($scope.userSignup.username.length < 50 && $scope.userSignup.password != $scope.cpassword){
+            if(!$scope.userSignup || !$scope.userSignup.username || !$scope.userSignup.password||  !$scope.cpassword ){
+                $scope.hintForSignup = "All fields need to be filled";
+            }else if($scope.userSignup.username.length < 50 && $scope.userSignup.password != $scope.cpassword ){
                 $scope.hintForSignup = "The passwords you entered twice are different";
             }else{
 
 
                 $http.post("/signup", $scope.userSignup)
                 .success(function (response) {
-
+                    
+                    if(response.err){
+                        $scope.hintForSignup = "The username already exists. Please choose another one."
+                    }else{
+                        console.log(response);
+                    }
                     //if signup success, do a login function
-                    $scope.userLogin = response;
-                    $scope.login();
+                    //$scope.userLogin = response;
+                    //$scope.login();
                 });
             }
         };
@@ -201,6 +208,7 @@ app.controller(
 
                     $scope.designItem.img = $('.image-choosen .image-choosen-preview').css('background');
                     $scope.designItem.designer = $scope.currentUser._id;
+                    
 
                     var dt = new Date();
                     //var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
@@ -955,6 +963,7 @@ app.controller(
         //$scope.message = "Hello World From Controller";        
 
 
+
         $http.get('/get_current_user').
             success(function(response){
                 $scope.currentUser = response;
@@ -1015,7 +1024,12 @@ app.controller(
                         $(".detail .preview").attr("src", imgSRC);
                         var dt = new Date(currentDesign.dt);
                         //console.log(dt);
-                        dt.setHours(dt.getHours() + parseInt(currentDesign.time_left));
+                        if(currentDesign.time_left == "0"){
+                            dt.setMinutes(dt.getMinutes() + 5);
+                        }else{
+                            dt.setHours(dt.getHours() + parseInt(currentDesign.time_left));
+                        }
+                        
                         //console.log(dt);
                         $(".detail .control .time-left").text(dt);
                         if(new Date() > new Date(dt)){
@@ -1038,7 +1052,10 @@ app.controller(
                         $(".detail .control .minimum").text("$ " + currentDesign.min_price);
                         $(".detail .control .name").text(currentDesign.name);
                         $scope.getAndSetDesignernameById(currentDesign.designer);
-                        $scope.getAndSetWinnernameById(currentDesign.current_winner);//it will set the current-winner ui, too
+                        if(currentDesign.current_winner){
+                            $scope.getAndSetWinnernameById(currentDesign.current_winner);//it will set the current-winner ui, too
+                        }
+                        
                         //console.log($scope.currentWinner);
                         //$(".detail .control .current-winner").text($scope.currentWinner);
                         $(".detail .description p").text(currentDesign.discription);
@@ -1146,21 +1163,27 @@ app.controller(
         };
 
         $scope.signup = function () {
-            if($scope.userSignup.username.length < 50 && $scope.userSignup.password != $scope.cpassword){
+            if(!$scope.userSignup || !$scope.userSignup.username || !$scope.userSignup.password||  !$scope.cpassword ){
+                $scope.hintForSignup = "All fields need to be filled";
+            }else if($scope.userSignup.username.length < 50 && $scope.userSignup.password != $scope.cpassword ){
                 $scope.hintForSignup = "The passwords you entered twice are different";
             }else{
 
 
                 $http.post("/signup", $scope.userSignup)
                 .success(function (response) {
-
+                    
+                    if(response.err){
+                        $scope.hintForSignup = "The username already exists. Please choose another one."
+                    }else{
+                        console.log(response);
+                    }
                     //if signup success, do a login function
-                    $scope.userLogin = response;
-                    $scope.login();
+                    //$scope.userLogin = response;
+                    //$scope.login();
                 });
             }
         };
-
 
         $scope.goAccount = function(){
             var currentPath = document.URL;
@@ -1428,21 +1451,29 @@ app.controller(
         };
 
         $scope.signup = function () {
-            if($scope.userSignup.username.length < 50 && $scope.userSignup.password != $scope.cpassword){
+            if(!$scope.userSignup || !$scope.userSignup.username || !$scope.userSignup.password||  !$scope.cpassword ){
+                $scope.hintForSignup = "All fields need to be filled";
+            }else if($scope.userSignup.username.length < 50 && $scope.userSignup.password != $scope.cpassword ){
                 $scope.hintForSignup = "The passwords you entered twice are different";
             }else{
 
 
                 $http.post("/signup", $scope.userSignup)
                 .success(function (response) {
-
+                    
+                    if(response.err){
+                        $scope.hintForSignup = "The username already exists. Please choose another one."
+                    }else{
+                        console.log(response);
+                    }
                     //if signup success, do a login function
-                    $scope.userLogin = response;
-                    $scope.login();
+                    //$scope.userLogin = response;
+                    //$scope.login();
                 });
             }
         };
 
+        
         $scope.getAndSetUsernameById = function(id){
             $http.get('/get_username/' + id).
             success(function(response){

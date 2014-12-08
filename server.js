@@ -273,23 +273,34 @@ app.get('/auth/facebook',
 app.get('/auth/facebook/callback',
         passportAPI.authenticate('facebook', {
             successRedirect : '/loginsuccess',
-            failureRedirect : '/'
+            failureRedirect : '/loginfail'
         }));
-
-
-app.get('/logout', function(req, res){
-  req.logout();
-  res.redirect('/');
-});
 
 app.get("/loginsuccess", function(req, res){
     //res.send("Hello World!");
     res.send("loginSuccess");
 });
 
+app.get("/loginfail", function(req, res){
+    //res.send("Hello World!");
+    res.send("loginFail");
+});
+
+app.get('/logout', function(req, res){
+  req.logout();
+  res.redirect('/');
+});
+
+
+
 app.post("/signup", function (req, res) {
         usersCollection.insert(req.body, function (err, doc) {
+          if(err){
+            res.send(err);
+          }else{
             res.json(doc);
+          }
+            
         });
     });
 

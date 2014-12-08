@@ -158,6 +158,10 @@ $(document).ready(function () {
                 uploadDialog.dialog("open");
             }); 
 
+            $(".upload-feature-container .cancel-btn").click(function () {
+                uploadDialog.dialog("close");
+            }); 
+
 
             $(".navigation .show-user").click(function (){
 
