@@ -1,8 +1,9 @@
 body{
 background: #f8f8f8;
+min-width: 992px;
 }
 
-.navigation-s{
+.navigation-s{z
 background: #ffffff;
 }
 
@@ -78,6 +79,7 @@ cursor: pointer;
 
 
 .body-container .left-panel{
+vertical-align: top;
 }
 
 .left-panel h1{
@@ -124,4 +126,57 @@ box-shadow: 0px 0px 2px #cccccc;
 cursor:pointer;
 background-size: cover;
 background-repeat: no-repeat;
+}
+
+
+/******************************************RESPONSIVE PART********************************************/
+@media only screen and (max-width: 1227px) {
+
+.navigation-s .login {
+right: 100px;
+}
+
+.navigation-s .sign-up {
+right: 210px;
+}
+
+.body-container .left-panel {
+width:30%;
+display: inline-block;
+}
+
+.body-container .right-panel {
+width:70%;
+}
+
+
+
+}
+
+
+
+
+
+
+@media only screen and (max-width: 994px) {
+
+
+.products .item {
+
+width: 500px;
+height: 500px;
+
+}
+
+.body-container .left-panel {
+width:20%;
+
+}
+
+.body-container .right-panel {
+display: inline-block;
+}
+
+
+
 }

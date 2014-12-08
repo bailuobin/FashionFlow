@@ -171,3 +171,43 @@ padding-left: 40px;
 padding-right: 40px;
 font-size: 20px;
 }
+
+
+/******************************************RESPONSIVE PART********************************************/
+@media only screen and (max-width: 1248px) {
+
+.navigation-s .login {
+right: 100px;
+}
+
+.navigation-s .sign-up {
+right: 210px;
+}
+
+.detail {
+text-align: center;
+padding-left: 0px;
+}
+
+.detail .preview {
+float: none;
+}
+
+.detail .control {
+float: none;
+margin: 0px;
+text-align: left;
+margin-left: auto;
+margin-right: auto;
+margin-top: 50px;
+}
+
+.detail .description {
+text-align: left;
+padding-left: 200px;
+padding-right: 200px;
+}
+
+
+
+}
