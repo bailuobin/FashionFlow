@@ -1430,12 +1430,14 @@ app.controller(
 
         $scope.Home = function() {
             var currentPath = document.URL;
-            $window.location.href = currentPath.substring(0, currentPath.length - 21);
+            var query = window.location.search;
+            $window.location.href = currentPath.substring(0, currentPath.length - 20 - query.length);
         }
 
         $scope.goAccount = function(){
             var currentPath = document.URL;
-            $window.location.href = currentPath.substring(0, currentPath.length - 20) + "account.html";
+            var query = window.location.search;
+            $window.location.href = currentPath.substring(0, currentPath.length - 20 - query.length) + "account.html";
         }
 
         $scope.goShoppingCart = function(){
