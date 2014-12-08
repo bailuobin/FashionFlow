@@ -127,6 +127,15 @@
     
     <div class="recent-products">
         <div class="title">Recent Design Flow</div>
+        <div class="item-container" ng-repeat="item in recentDesigns" ng-click="goItem(item.id)">
+            <img class='item' ng-attr-src="{{item.img}}" >
+            <div class="item-cover">
+                <h3>{{item.name}}</h3>            
+            </div>
+        </div>
+        
+        
+
 
     </div>
 

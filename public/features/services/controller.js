@@ -37,6 +37,7 @@ app.controller(
 
                 var recentDesigns = response;
                 //console.log(recentDesigns);
+                $scope.recentDesigns = [];
 
                 for(i=0; i< recentDesigns.length; i++){
 
@@ -45,15 +46,20 @@ app.controller(
                         $http.get('/load_design_by_id/' + recentDesigns[i]).
                         success(function(response){
 
+                            
+
                             var strContents = response.img.split(' ');
                         
                             imgSRC = strContents[4].substring(4, strContents[4].length - 1);
-                            $(".recent-products").append("<img class='item' id=' "+ response._id +" ' src='" + imgSRC + "'></div>");
-                            $(".recent-products .item").click(function(){
-                                //alert($(this).attr("id"));
-                                var currentPath = document.URL;
-                                $window.location.href = "design-detail.html?id=" + $(this).attr("id");;
-                            });
+
+                            $scope.recentDesigns.push({ id: response._id , img: imgSRC , name:response.name});
+
+
+                           
+
+
+                            
+
                         });
                     }
                     
@@ -61,6 +67,8 @@ app.controller(
                               
             });
         }
+
+
 
         $scope.loadRecentDesigns();
 
@@ -160,6 +168,11 @@ app.controller(
             $window.location.href = currentPath + "designs-display.html";
         }
 
+        $scope.goItem = function(id){
+            var currentPath = document.URL;
+            $window.location.href = "design-detail.html?id=" + id;
+
+        }
 
 
 
@@ -1011,10 +1024,17 @@ app.controller(
                 if(!(currentDesign._id === undefined)){
                     $(function (){
 
+                        if(!$scope.currentUser._id){
+                            $('.stuff-to-hide-bidding').hide();
+                            $scope.hintForBidding = "Login now to get more information!";
+                        }
+
                         if(currentDesign.designer == $scope.currentUser._id){
                             $('.stuff-to-hide-bidding').hide();
 
                         }
+
+
                         
                         //console.log(currentDesign.img);
                         var strContents = currentDesign.img.split(' ');
@@ -1034,7 +1054,7 @@ app.controller(
                         $(".detail .control .time-left").text(dt);
                         if(new Date() > new Date(dt)){
                             $('.stuff-to-hide-bidding').hide();
-                            if(currentDesign.finally_belong_to == $scope.currentUser._id){
+                            if(currentDesign.finally_belong_to == $scope.currentUser._id && $scope.currentUser._id){
                                 if(currentDesign.status == "SOLD"){
                                     $scope.hintForBidding = "You bought this Design!";
                                 }else{
@@ -1283,7 +1303,42 @@ app.controller(
             });
         }
 
-        
+        $scope.loadRecentDesigns = function() {
+            $http.get('/load_recent_designs').
+            success(function(response){
+
+                var recentDesigns = response;
+                //console.log(recentDesigns);
+                $scope.recentDesigns = [];
+
+                for(i=0; i< recentDesigns.length; i++){
+
+                    if(i <= 8){
+                        //console.log(recentDesigns[i]);
+                        $http.get('/load_design_by_id/' + recentDesigns[i]).
+                        success(function(response){
+
+                            
+
+                            var strContents = response.img.split(' ');
+                        
+                            imgSRC = strContents[4].substring(4, strContents[4].length - 1);
+
+                            $scope.recentDesigns.push({ id: response._id , img: imgSRC , name : response.name});
+
+
+                           
+
+
+                            
+
+                        });
+                    }
+                    
+                }
+                              
+            });
+        }
 
 
         $scope.loadDefaultDesigns = function(){
@@ -1293,20 +1348,18 @@ app.controller(
             success(function(response){
                 var designsDefault = response;
 
-                console.log(designsDefault);
+                $scope.resultsDesigns = [];
+
+                              
                 for(i=0; i< designsDefault.length; i++){
-                        //console.log(designsDefault[i]);
-                        //$(".products").append("<div class='item' id=' "+ designsDefault[i]._id +" ' style='background: " + designsDefault[i].img + " ;'></div>");
+                        
                         var strContents = designsDefault[i].img.split(' ');
                         
                         imgSRC = strContents[4].substring(4, strContents[4].length - 1);
                         //console.log(imgSRC);
-                        $(".products").append("<img class='item' id=' "+ designsDefault[i]._id +" ' src='" + imgSRC + " '>");
-                        $(".products .item").click(function(){
-                            //alert($(this).attr("id"));
-                            var currentPath = document.URL;
-                            $window.location.href = "design-detail.html?id=" + $(this).attr("id");;
-                        });
+
+                        $scope.resultsDesigns.push({ id: designsDefault[i]._id , img: imgSRC , name:designsDefault[i].name});
+                        
                                      
                 }
             });
@@ -1473,7 +1526,7 @@ app.controller(
             }
         };
 
-        
+
         $scope.getAndSetUsernameById = function(id){
             $http.get('/get_username/' + id).
             success(function(response){
@@ -1501,6 +1554,13 @@ app.controller(
             var currentPath = document.URL;
             var query = window.location.search;
             $window.location.href = currentPath.substring(0, currentPath.length - 20 - query.length) + "shopping-cart.html";
+        }
+
+        $scope.goItem = function(id){
+            
+            var currentPath = document.URL;
+            $window.location.href = "design-detail.html?id=" + id;
+
         }
 
         $scope.searchMen = function(){
