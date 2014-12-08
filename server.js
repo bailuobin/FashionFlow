@@ -1,7 +1,10 @@
 
 var express = require('express');
 var passport = require('passport')
-    , LocalStrategy = require('passport-local').Strategy;
+    , LocalStrategy = require('passport-local');
+
+var passportAPI = require('passport')
+    ,FacebookStrategy = require('passport-facebook').Strategy;
 
 var app = express();
 var mongojs = require('mongojs');
@@ -72,6 +75,68 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(function(user, done) {
+  done(null, user);
+});
+
+passportAPI.use(new FacebookStrategy({
+    clientID: "879879865363541",
+    clientSecret: "4dbc2569e9e82c70b7baefdf22354805",
+    callbackURL: "http://localhost:8080/auth/facebook/callback"
+  },
+  function(accessToken, refreshToken, profile, done) {
+
+
+    usersCollection.findOne(function(err, user) {
+      if (err) { return done(err); }
+      done(null, user);
+    });
+
+    usersCollection.findOne(
+      { 'facebook.id' : profile.id }, 
+      function(err, user) {
+
+                // if there is an error, stop everything and return that
+                // ie an error connecting to the database
+                if (err)
+                    return done(err);
+
+                // if the user is found, then log them in
+                if (user) {
+
+                    return done(null, user); // user found, return that user
+
+                } else {
+
+                    // if there is no user found with that facebook id, create them
+                    var newUser = {
+                      username: profile.id,
+                      password: 123456,
+                      facebook: { 
+                                  id : profile.id, // set the users facebook id 
+                                  token : token, // we will save the token that facebook provides to the user  
+                                  name : profile.name.givenName + ' ' + profile.name.familyName, // look at the passport user profile to see how names are returned
+                                  email : profile.emails[0].value // facebook can return multiple emails so we'll take the first
+                                }
+                    }
+
+                    usersCollection.insert(
+                      newUser, 
+                      function (err, doc){
+                          return done(null, doc);
+                      }
+                    );
+                    
+                }
+
+    });
+  
+}));
+
+passportAPI.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passportAPI.deserializeUser(function(user, done) {
   done(null, user);
 });
 
@@ -200,6 +265,17 @@ app.post('/login',
   passport.authenticate('local', { successRedirect: '/loginsuccess',
                                    failureRedirect: '/'})
 );
+
+app.get('/auth/facebook',
+        passportAPI.authenticate('facebook', { scope : 'email' })
+);
+
+app.get('/auth/facebook/callback',
+        passportAPI.authenticate('facebook', {
+            successRedirect : '/loginsuccess',
+            failureRedirect : '/'
+        }));
+
 
 app.get('/logout', function(req, res){
   req.logout();

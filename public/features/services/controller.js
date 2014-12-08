@@ -90,6 +90,32 @@ app.controller(
             });
         };
 
+        $scope.loginWithFacebook = function (){
+            $http.get("/auth/facebook")
+            .success(function (response) {
+
+                //$location.path('/hello');
+                //$route.reload();
+
+                if(response == "loginSuccess"){
+                    $http.get('/get_current_user').
+                    success(function(response){
+                        $scope.currentUser = response;
+                        //alert($scope.currentUser.username);
+                    });
+
+                    var currentPath = document.URL;
+                    $window.location.href = currentPath;
+
+
+                }else{
+                    $scope.hintForLogin = "Username or Password not correct.";
+                }
+
+
+            });
+        }
+
         $scope.signup = function () {
             if($scope.userSignup.username.length < 50 && $scope.userSignup.password != $scope.cpassword){
                 $scope.hintForSignup = "The passwords you entered twice are different";

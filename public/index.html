@@ -19,6 +19,7 @@
 <script src="js/app.js"></script>
 <script src="features/services/controller.js"></script>
 <link href="css/mycss.css" rel="stylesheet" media="all">
+<script src="js/facebook.auth.js"></script>
 
 </head>
 
@@ -39,6 +40,10 @@
                 <div class="sub">
                     <p>“We don’t sell apparels</p>
                     <p>we change the definition of fashion”</p>
+                </div>
+                <div class="sub">
+                    <p>“Bid the Design you like</p>
+                    <p>And it will be yours”</p>
                 </div>
             </div>
             <div class="search myglow">Search</div>
@@ -111,7 +116,7 @@
             <fieldset class="search-field-set">
                 <input type="text" class="col-md-10 my-search-input text ui-widget-content ui-corner-all" ng-model="searchQuery">
                 
-                <button class="col-md-1 my-btn-search" ng-click="goSearch()">Search</button>
+                <button class="col-md-1 my-btn-search" ng-click="goSearch()">Find it</button>
                                      
                 <!-- Allow form submission with keyboard without duplicating the dialog button -->
                 <input type="submit" tabindex="-1" style="position: absolute; top: -1000px">
@@ -121,7 +126,7 @@
     </div>
     
     <div class="recent-products">
-        <div style="margin: 20px;font-size: 30px;color: #946EA7;">Recent Fashion Flow</div>
+        <div class="title">Recent Design Flow</div>
 
     </div>
 
