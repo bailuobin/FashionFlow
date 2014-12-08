@@ -20,8 +20,9 @@ var db = mongojs(mongodbConnectionString, ["applications"]);
 var usersCollection = db.collection('users');
 usersCollection.ensureIndex( { "username": 1 }, { unique: true } );//make the username field unique
 var designItemCollection = db.collection('design_items');
+designItemCollection.ensureIndex( { name: "text" } );
 var mostRecentDesignsCollection = db.collection('recent_designs');
-var RelationCollection = db.collection('relationship');
+//var RelationCollection = db.collection('relationship');
 
 var ipaddress = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
 var port      = process.env.OPENSHIFT_NODEJS_PORT || 8080;
@@ -90,25 +91,86 @@ function checkBiddingDeadLine() {
     for(i = 0; i < doc.length; i++){
       //console.log(doc[i].dt);
       if(doc[i].status == "ON_GOING"){
-        deadline = new Date(doc[i].dt);
-        //console.log(deadline);
-        currentTime = new Date();
+        //console.log(doc[i]._id);
+        var deadline = new Date(doc[i].dt);
+        deadline.setHours(deadline.getHours() + parseInt(doc[i].time_left));
 
+        //console.log(deadline);
+        var currentTime = new Date();
+        //currentTime.setHours(currentTime.getHours() + 10);
+        //console.log(currentTime);
+        //console.log(currentTime);
         if(currentTime > deadline){
+          //console.log("passed deadline");
+
           //console.log(doc[i]._id + doc[i].name + ": passed deadline");
-          //modify this design item to a passed deadline status
           
           var currentWinner = doc[i].current_winner;
-          //console.log(currentWinner);
+          var currentDesigner = doc[i].designer;
 
-          designItemCollection.findAndModify({
-            query: { _id: mongojs.ObjectId(doc[i]._id) },
-            update: { $set: { finally_belong_to: currentWinner,
-                              status: "WAIT_FOR_PAYMENT"} },
-            new: true
-          });
+          if(currentWinner == undefined){// which means deadline passed but no one bid
+              designItemCollection.findAndModify({
+                query: { _id: mongojs.ObjectId(doc[i]._id) },
+                update: { $set: { status: "NO_ONE_BID"} },
+                new: true
+              });
+
+              usersCollection.update(
+               { _id: mongojs.ObjectId(currentDesigner)},
+               { $pull: { selling_designs: doc[i]._id } },//remove this item from selling list
+               { upsert: true}
+              );
+
+          }else{
+              designItemCollection.findAndModify({
+                query: { _id: mongojs.ObjectId(doc[i]._id) },
+                update: { $set: { finally_belong_to: currentWinner,
+                                  status: "WAIT_FOR_PAYMENT"} },
+                new: true
+              });
+
+              usersCollection.update(
+               { _id: mongojs.ObjectId(currentWinner) },
+               { $addToSet: { wait_for_pay_designs: doc[i]._id} },
+               { upsert: true}
+              );
+
+              usersCollection.update(
+               { _id: mongojs.ObjectId(currentWinner)},
+               { $pull: { bidding_designs: doc[i]._id } },//remove this item from bidding list
+               { upsert: true}
+              );
+
+          }
 
 
+
+          // designItemCollection.findAndModify({
+          //   query: { _id: mongojs.ObjectId(doc[i]._id) },
+          //   update: { $set: { finally_belong_to: currentWinner,
+          //                     status: "WAIT_FOR_PAYMENT"} },
+          //   new: true
+          // });
+
+          // usersCollection.update(
+          //  { _id: mongojs.ObjectId(currentWinner) },
+          //  { $addToSet: { wait_for_pay_designs: doc[i]._id} },
+          //  { upsert: true}
+          // );
+
+          // usersCollection.update(
+          //  { _id: mongojs.ObjectId(currentWinner)},
+          //  { $pull: { bidding_designs: doc[i]._id } },//remove this item from bidding list
+          //  { upsert: true}
+          // );
+
+          // usersCollection.update(
+          //  { _id: mongojs.ObjectId(currentDesigner)},
+          //  { $pull: { selling_designs: doc[i]._id } },//remove this item from selling list
+          //  { upsert: true}
+          // );
+
+          
 
           
 
@@ -124,7 +186,7 @@ function checkBiddingDeadLine() {
 }
 
 
- 
+
 setInterval(checkBiddingDeadLine, 1*1000);
 
 
@@ -163,21 +225,15 @@ app.post("/upload", function (req, res) {
             mostRecentDesignsCollection.update(
                { name: "recent_designs"},
                { $addToSet: { designs: doc._id } },
-               { upsert: true},
-               function (){
-
-               }
+               { upsert: true}
             );
 
         });
 
-        RelationCollection.update(
-           { user_id: req.body.designer},
+        usersCollection.update(
+           { _id: mongojs.ObjectId(req.body.designer)},
            { $addToSet: { selling_designs: req.body._id } },
-           { upsert: true},
-           function (err, doc){
-              console.log(doc);
-           }
+           { upsert: true}
         );
 
     });
@@ -192,7 +248,7 @@ app.get("/load_selling_designs/:id", function (req, res) {
             });
     });
 
-app.get("/load_current_design/:id", function (req, res) {
+app.get("/load_design_by_id/:id", function (req, res) {
         var id = req.params.id;
 
         designItemCollection.findOne({ _id: mongojs.ObjectId(id)},
@@ -214,15 +270,14 @@ app.put("/bid/:design_id", function (req, res) {
         new: true
     },
         function (err, doc) {
-            res.json(doc);
+          console.log(doc);
+          res.json(doc);
     });
 
-    RelationCollection.update(
-       { user_id: req.body.userId},
-       { $addToSet: { bidding_designs: id } },
-       { upsert: true},
-       function (){
-       }
+    usersCollection.update(
+       { _id: mongojs.ObjectId(req.body.userId)},
+       { $addToSet: { bidding_designs: mongojs.ObjectId(id) } },
+       { upsert: true}
     );
 
 });
@@ -243,7 +298,7 @@ app.get("/load_recent_designs", function (req, res) {
 
     mostRecentDesignsCollection.find(
       {name : "recent_designs"}, 
-      function(err, doc){
+      function (err, doc){
 
           res.json(doc[0].designs);
 
@@ -257,19 +312,150 @@ app.get("/load_designs_default", function (req,res){
     });
 });
 
+app.get("/load_shopcart_data/:id", function (req, res) {
+        var user_id = req.params.id;
 
-/*
-//for login route
-app.post('/login', function (req, res) {
-  var post = req.body;
-  if (post.username == 'admin' && post.password == '123456') {
-    req.session.user_id = 111111111;
-    res.redirect('/hello');
-  } else {
-    res.send('Bad user/pass');
-  }
+        //console.log(user_id);
+
+        usersCollection.find(
+          { _id: mongojs.ObjectId(user_id)},
+          function (err, doc) {
+            //console.log(user);
+            if(doc.length > 0){
+              res.send(doc[0].wait_for_pay_designs);
+            }
+            
+            //res.send(doc[0].selling_designs);
+          }
+        );
+
 });
-*/
+
+
+app.put("/pay/:id", function (req, res) {
+    var id = req.params.id;
+    console.log(id);
+    if(req.body.action == "confirm"){//change status to sold
+
+        console.log(req.body.action);
+
+        designItemCollection.findAndModify({
+            query: { _id: mongojs.ObjectId(id) },
+            update: { $set: { status: "SOLD" }},
+            new: true
+        },
+            function (err, doc) {
+              //console.log(doc);
+              //res.json(doc);
+        });
+
+        //console.log("dsadad");
+        //console.log(req.body.buyerID);
+        //console.log(mongojs.ObjectId(req.body.buyerID));
+
+        usersCollection.update(
+           { _id: mongojs.ObjectId(req.body.buyerID)},
+           { $addToSet: { bought_designs: mongojs.ObjectId(id) } },//there will be no duplicates
+           { upsert: true}
+        );
+
+        usersCollection.update(
+           { _id: mongojs.ObjectId(req.body.buyerID)},
+           { $pull: { wait_for_pay_designs: mongojs.ObjectId(id) } },//remove this item from waiting pay list
+           { upsert: true}
+        );
+
+        //console.log(mongojs.ObjectId(req.body.designerID));
+        usersCollection.update(
+           { _id: mongojs.ObjectId(req.body.designerID)},
+           { $addToSet: { sold_designs: mongojs.ObjectId(id) } },
+           { upsert: true}
+        );
+
+        usersCollection.update(
+           { _id: mongojs.ObjectId(req.body.designerID)},
+           { $pull: { selling_designs: mongojs.ObjectId(id) } },
+           { upsert: true}
+        );
+
+        res.send("pay success");
+
+
+
+    }else{
+        // do something here
+    }
+    
+
+});
+
+app.get("/load_ongoing/:id", function (req, res) {
+  var id = req.params.id;  
+  usersCollection.find(
+   { _id: mongojs.ObjectId(id)},
+   function (err, doc){
+      //console.log(doc);
+      res.json(doc);
+   }
+  );
+});
+
+
+
+app.get("/load_search_results/:query", function (req, res) {
+  //var query = req.params.query;
+  var query = req.params.query;
+  console.log("Query is: " + query);
+
+  designItemCollection.find(
+    { $text: { $search: query } },
+    function(err, docs){
+      //console.log(err);
+      if(docs != null){
+        //console.log(docs[0].name);
+        res.json(docs);
+      }
+    }
+  );
+
+});
+
+app.get("/load_results_by_sex/:query", function (req, res) {
+  //var query = req.params.query;
+  var query = req.params.query;
+  console.log("Query is: " + query);
+
+  designItemCollection.find(
+    { sex: query },
+    function(err, docs){
+      //console.log(err);
+      if(docs != null){
+        //console.log(docs[0].name);
+        res.json(docs);
+      }
+    }
+  );
+
+});
+
+app.get("/load_results_by_category/:query", function (req, res) {
+  //var query = req.params.query;
+  var query = req.params.query;
+  console.log("Query is: " + query);
+
+  designItemCollection.find(
+    { category: query },
+    function(err, docs){
+      //console.log(err);
+      if(docs != null){
+        //console.log(docs[0].name);
+        res.json(docs);
+      }
+    }
+  );
+
+});
+
 
 
 

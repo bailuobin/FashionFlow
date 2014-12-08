@@ -26,23 +26,93 @@
 <body ng-controller="DesignsDisplayCtrl">
 
     <div class="navigation-s">
-        <div class="logo-s">
+        <div class="logo-s" ng-click="Home()">
             <img src="img/logo-s.svg" />
         </div>
-        <div class="men-label myglow-p" ng-click="">Men</div>
-        <div class="women-label myglow-p" ng-click="">Women</div>
-        <div class="uni-label myglow-p" ng-click="">Uni</div>
-        <div class="username-label myglow-p" ng-click="goAccount()"></div>
+        <div class="men-label myglow-p" ng-click="searchMen()">Men</div>
+        <div class="women-label myglow-p" ng-click="searchWomen()">Women</div>
+        <div class="uni-label myglow-p" ng-click="searchUni()">Uni</div>
+        <div class="login myglow-p">Login</div>
+        <div class="sign-up myglow-p">SignUp</div>
+        <div class="username-label myglow-p" ng-click="goAccount()"></div>        
+        <div class="shopping-cart" ng-click="goShoppingCart()">
+            <div class="icon col-md-4"><img src="img/shopping-purse-purple.svg"></div>
+            <div class="container col-md-6">
+                <span class="items">1</span>
+                <span>item(s)</span>
+            </div>
+        </div>
     </div>
+
+    <!-- LOGIN DIALOG -->
+    <div id="my-login-dialog-form" title="Tell me who are you" >
+        <p class="validateTips">{{ hintForLogin }}</p>
+
+        <form class="my-login-form" action="/login" method="post">
+            <fieldset>
+                <label for="email">Username(email)</label>
+                <input type="text" name="email" id="email" value="" class="text ui-widget-content ui-corner-all" ng-model="userLogin.username">
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" value="" class="text ui-widget-content ui-corner-all" ng-model="userLogin.password">
+
+                <!-- <input type="submit" value="Login" class="my-btn-login"> -->
+                <button class="my-btn-login" ng-click="login()">Login</button>
+                
+                       
+                <!-- Allow form submission with keyboard without duplicating the dialog button -->
+                <input type="submit" tabindex="-1" style="position: absolute; top: -1000px">
+            </fieldset>
+        </form>
+    </div>
+
+
+    <!-- SIGN UP DIALOG -->
+    <div id="my-signup-dialog-form" title="Join us now">
+        <p class="validateTips">{{ hintForSignup }}</p>
+
+        <form class="my-signup-form" >
+            <fieldset>
+                <label for="email">Username(email)</label>
+                <input type="text" name="email" id="email" value="" class="text ui-widget-content ui-corner-all" ng-model="userSignup.username">
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" value="" class="text ui-widget-content ui-corner-all" ng-model="userSignup.password">
+                <label for="password">Confirm Password</label>
+                <input type="password" name="c-password" id="c-password" value="" class="text ui-widget-content ui-corner-all" ng-model="cpassword">
+
+                <button class="my-btn-signup" ng-click="signup()">Submit</button>
+                       
+                <!-- Allow form submission with keyboard without duplicating the dialog button -->
+                <input type="submit" tabindex="-1" style="position: absolute; top: -1000px">
+            </fieldset>
+        </form>
+    </div>
+
 
     <div class="body-container">
         <div class="left-panel col-md-2">
             <h1>Filters</h1>
             <div class="category">Category</div>
+            <div class="category-item">Beachwear</div>
+            <div class="category-item">Coats</div>
+            <div class="category-item">Dresses</div>                      
+            <div class="category-item">Denim</div>
+            <div class="category-item">Jackets</div>
+            <div class="category-item">Knitwear</div>
+            <div class="category-item">Lingerie</div>
+            <div class="category-item">Polo shirts</div>
+            <div class="category-item">Shirts</div>
+            <div class="category-item">Skirts</div>
+            <div class="category-item">Shorts</div>
+            <div class="category-item">Suits</div>
+            <div class="category-item">Sweaters and knitwear</div>
+            <div class="category-item">Trousers</div>
+            <div class="category-item">T-Shirts and vests</div>
+            <div class="category-item">Underwear and socks</div>
         </div>
         <div class="right-panel col-md-10">
             <div class="upper-part">
-                <div>Sort:</div>
+                <div style="display: inline-block;">Results of :</div>
+                <div class="results-of"></div>
             </div>
             <div class="products">
             </div>

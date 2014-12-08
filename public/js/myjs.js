@@ -94,6 +94,10 @@ $(document).ready(function () {
                 loginDialog.dialog("open");
             }); 
 
+            $(".navigation-s .login").click(function () {
+                loginDialog.dialog("open");
+            }); 
+
 
             //building dialog for sign up
             signupDialog = $("#my-signup-dialog-form").dialog({
@@ -119,6 +123,10 @@ $(document).ready(function () {
             });
 
             $(".navigation .sign-up").click(function () {
+                signupDialog.dialog("open");
+            }); 
+
+            $(".navigation-s .sign-up").click(function () {
                 signupDialog.dialog("open");
             }); 
 

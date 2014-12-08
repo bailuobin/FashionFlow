@@ -25,7 +25,7 @@
 <body ng-controller="AccountCtrl">
 
     <div class="navigation-s" >
-        <div class="logo-s">
+        <div class="logo-s" ng-click="Home()">
             <img src="img/logo-s.svg" />
         </div>
         <div class="username-label-s"></div>
@@ -36,23 +36,21 @@
     <div class="ongoing-general">
         <div class="title">On Going</div>
         <div class="items">
-            <div class="item"></div>
-            <div class="item"></div>
-            <div class="item"></div>
-            <div class="item"></div>
-            <div class="item"></div>
+            <img class="item" ng-attr-src="{{item.img}}" ng-repeat="item in onGoingItems" ng-click="goItem(item.id)">
         </div>
+        <div class="title see-more see-more-stuff">See More</div>
+        <div class="title myglow-p triangle see-more-stuff" ng-click="expandItemsOnGoing()"><img src="img/triangle-purple.svg" style="width:22px;"></div>
+        <div class="title myglow-p triangle-up" ng-click="collapseItemsOnGoing()"><img src="img/triangle-purple-up.svg" style="width:22px;"></div>
     </div>
 
     <div class="history-general">
         <div class="title">History</div>
         <div class="items">
-            <div class="item"></div>
-            <div class="item"></div>
-            <div class="item"></div>
-            <div class="item"></div>
-            <div class="item"></div>
+            <img class="item" ng-attr-src="{{item.img}}" ng-repeat="item in historyItems" ng-click="goItem(item.id)">
         </div>
+        <div class="title see-more see-more-stuff">See More</div>
+        <div class="title myglow-p triangle see-more-stuff" ng-click="expandItemsHistory()"><img src="img/triangle-purple.svg" style="width:22px;"></div>
+        <div class="title myglow-p triangle-up" ng-click="collapseItemsHistory()"><img src="img/triangle-purple-up.svg" style="width:22px;"></div>
     </div>
 
     <div class="loader">

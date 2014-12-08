@@ -20,24 +20,29 @@ app.controller(
                         $(".navigation .show-user").text("Hello, " + currentUsername);
                         $(".navigation .logout").show();
 
-                        $scope.loadRecentDesigns();
+                        //$scope.loadRecentDesigns();
                     });
+                }else{
+                    //$scope.loadRecentDesigns();
                 }
+
                 
         });
+
+
 
         $scope.loadRecentDesigns = function() {
             $http.get('/load_recent_designs').
             success(function(response){
 
                 var recentDesigns = response;
-                console.log(recentDesigns);
+                //console.log(recentDesigns);
 
                 for(i=0; i< recentDesigns.length; i++){
 
                     if(i <= 8){
-                        console.log(recentDesigns[i]);
-                        $http.get('/load_current_design/' + recentDesigns[i]).
+                        //console.log(recentDesigns[i]);
+                        $http.get('/load_design_by_id/' + recentDesigns[i]).
                         success(function(response){
 
                             var strContents = response.img.split(' ');
@@ -54,9 +59,10 @@ app.controller(
                     
                 }
                               
-        });
+            });
         }
-        
+
+        $scope.loadRecentDesigns();
 
         $scope.login = function () {
             $http.post("/login", $scope.userLogin)
@@ -110,6 +116,12 @@ app.controller(
             });
         };
 
+        $scope.goSearch = function(){
+            var currentPath = document.URL;
+            $window.location.href = currentPath + "designs-display.html?query=" + $scope.searchQuery;
+        }
+
+
         $scope.goDisplay = function(){
             var currentPath = document.URL;
             $window.location.href = currentPath + "designs-display.html";
@@ -121,49 +133,20 @@ app.controller(
 
 
 
-        $scope.renderServiceClients = function (response) {
-            $scope.serviceClients = response;
-        };
-
-        $scope.all = function () {
-            //get all
-            $http.get("/applications").success($scope.renderServiceClients);
-        };
-
-        $scope.create = function () {
-            $http.post("/applications", $scope.currentServiceClient)
-            .success(function (response) {
-                $scope.all();
-            });
-        };
 
 
-        $scope.remove = function (id) {
-            $http.delete("/applications/" + id)
-            .success(function (response) {
-                $scope.all();
-            });
-        };
+
+        
+
+        // $scope.remove = function (id) {
+        //     $http.delete("/applications/" + id)
+        //     .success(function (response) {
+        //         $scope.all();
+        //     });
+        // };
 
 
-        $scope.select = function (id) {
-
-            console.log(id);
-
-            $http.get("/applications/" + id)
-            .success(function (response) {
-                $scope.currentServiceClient = response;
-                console.log(response);
-            });
-        };
-
-        $scope.update = function () {
-            $http.put("/applications/" + $scope.currentServiceClient._id, $scope.currentServiceClient)
-            .success(function (response) {
-                $scope.all();
-            });
-        };
-
+        
     }]);
 
 
@@ -195,10 +178,9 @@ app.controller(
 
                     var dt = new Date();
                     //var time = dt.getHours() + ":" + dt.getMinutes() + ":" + dt.getSeconds();
+                    $scope.designItem.dt = dt ;
 
-                    $scope.designItem.dt = dt;
-
-                    $scope.status = "ON_GOING";
+                    $scope.designItem.status = "ON_GOING";
 
                     //$scope.bidBy = [];
 
@@ -242,10 +224,210 @@ app.controller(
                 if(!(currentID === undefined)){
                     $(function (){
                         $(".navigation-s .username-label-s").text(currentUsername);
+                        $scope.loadOnGoing();
+                        $scope.loadHistory();
                     });
                 }
                 
         });
+
+
+
+        $scope.loadOnGoing = function(){
+            $http.get('/load_ongoing/' + $scope.currentUser._id).
+            success(function(response){
+                //console.log(response);
+                var sellingItems = response[0].selling_designs;
+                if(sellingItems == undefined){
+                    sellingItems = []
+                }
+                console.log(sellingItems);
+
+                var biddingItems = response[0].bidding_designs;
+                if(biddingItems == undefined){
+                    biddingItems = []
+                }
+                console.log(biddingItems);
+
+                var waitForPayItems = response[0].wait_for_pay_designs;
+                if(waitForPayItems == undefined){
+                    waitForPayItems = []
+                }
+                console.log(waitForPayItems);
+
+                onGoingItemIDS = sellingItems.concat(biddingItems).concat(waitForPayItems);
+
+                console.log(onGoingItemIDS);
+
+                //calculate line numbers
+                if( onGoingItemIDS.length%5 == 0){
+                    lineNumForItemsDisplay = parseInt(onGoingItemIDS.length/5);
+                }else{
+                    lineNumForItemsDisplay = parseInt(onGoingItemIDS.length/5) + 1;
+                }
+
+                if(lineNumForItemsDisplay == 1){
+                    $( ".ongoing-general .see-more-stuff" ).hide();
+                }else{
+                    $( ".ongoing-general .see-more-stuff" ).show();
+                    $scope.itemsHeight = lineNumForItemsDisplay * (257 + 5);
+                }
+                
+
+                $scope.onGoingItems = [];
+                $(function (){
+                        //console.log($scope.results.length);
+                        for (i = 0; i < onGoingItemIDS.length; i++){
+
+                            $http.get('/load_design_by_id/' + onGoingItemIDS[i]).
+                            success(function(response){
+                                var strContents = response.img.split(' ');
+                                imgSRC = strContents[4].substring(4, strContents[4].length - 1);
+
+                                $scope.onGoingItems.push({id: response._id, img: imgSRC});
+
+                            });
+
+                            
+                        }
+
+                        
+
+                });
+
+
+            });
+        }
+
+        $scope.loadHistory = function(){
+            $http.get('/load_ongoing/' + $scope.currentUser._id).
+            success(function(response){
+                //console.log(response);
+                var boughtItems = response[0].bought_designs;
+                if(boughtItems == undefined){
+                    boughtItems = []
+                }
+                console.log(boughtItems);
+
+                var soldItems = response[0].sold_designs;
+                if(soldItems == undefined){
+                    soldItems = []
+                }
+                console.log(soldItems);
+
+                historyItemIDS = boughtItems.concat(soldItems);
+
+                console.log(historyItemIDS);
+
+                //calculate line numbers
+                if( historyItemIDS.length%5 == 0){
+                    lineNumForItemsDisplay = parseInt(historyItemIDS.length/5);
+                }else{
+                    lineNumForItemsDisplay = parseInt(historyItemIDS.length/5) + 1;
+                }
+                if(lineNumForItemsDisplay == 1){
+                    $( ".history-general .see-more-stuff" ).hide();
+                }else{
+                    $( ".history-general .see-more-stuff" ).show();
+                    $scope.itemsHeight = lineNumForItemsDisplay * (257 + 5);
+                }
+                
+
+                $scope.historyItems = [];
+                $(function (){
+                        //console.log($scope.results.length);
+                        for (i = 0; i < historyItemIDS.length; i++){
+
+                            $http.get('/load_design_by_id/' + historyItemIDS[i]).
+                            success(function(response){
+                                var strContents = response.img.split(' ');
+                                imgSRC = strContents[4].substring(4, strContents[4].length - 1);
+
+                                $scope.historyItems.push({id: response._id, img: imgSRC});
+
+                            });
+
+                            
+                        }
+
+                        
+
+                });
+
+
+            });
+        }
+
+        $scope.expandItemsOnGoing = function() {
+            $(function() {
+                $( ".ongoing-general .items" ).animate({
+                          height: $scope.itemsHeight
+                        }, 500, callback);
+             
+                function callback() {
+                  
+                    $(".ongoing-general .triangle").hide();
+                    $(".ongoing-general .see-more").text("                        ");
+                    $(".ongoing-general .triangle-up").show();
+
+                }
+            });
+        }
+
+        $scope.collapseItemsOnGoing = function() {
+            $(function() {
+                $( ".ongoing-general .items" ).animate({
+                          height: 257
+                        }, 500, callback);
+             
+                function callback() {
+                  
+                    $(".ongoing-general .triangle").show();
+                    $(".ongoing-general .see-more").text("See More");
+                    $(".ongoing-general .triangle-up").hide();
+
+                }
+            });
+        }
+
+        $scope.expandItemsHistory = function() {
+            $(function() {
+                $( ".history-general .items" ).animate({
+                          height: $scope.itemsHeight
+                        }, 500, callback);
+             
+                function callback() {
+                  
+                    $(".history-general .triangle").hide();
+                    $(".history-general .see-more").text("                        ");
+                    $(".history-general .triangle-up").show();
+
+                }
+            });
+        }
+
+        $scope.collapseItemsHistory = function() {
+            $(function() {
+                $( ".history-general .items" ).animate({
+                          height: 257
+                        }, 500, callback);
+             
+                function callback() {
+                  
+                    $(".history-general .triangle").show();
+                    $(".history-general .see-more").text("See More");
+                    $(".history-general .triangle-up").hide();
+
+                }
+            });
+        }
+
+        $scope.goItem = function(id){
+            var currentPath = document.URL;
+            $window.location.href = currentPath.substring(0, currentPath.length - 12) + "design-detail.html?id=" + id;
+
+        }
+
 
         
 
@@ -260,6 +442,11 @@ app.controller(
         $scope.goBuyerPage = function() {
             var currentPath = document.URL;
             $window.location.href = currentPath.substring(0, currentPath.length - 5) + "-buyer.html";
+        }
+
+        $scope.Home = function() {
+            var currentPath = document.URL;
+            $window.location.href = currentPath.substring(0, currentPath.length - 12);
         }
 
         
@@ -285,55 +472,127 @@ app.controller(
                     $(function (){
                         $(".navigation-s .username-label-s").text(currentUsername);
 
-                        $scope.load_selling_designs($scope.currentUser._id);
-
+                        $scope.loadSellingDesigns();
+                        $scope.loadSoldDesigns();
                     });
                 }
                 
         });
 
-        //load the designItems that are selling by the designer
-        $scope.load_selling_designs = function(id){
-            $http.get('/load_selling_designs/' + id).
+        $scope.loadSellingDesigns = function(){
+            $http.get('/load_ongoing/' + $scope.currentUser._id).
             success(function(response){
-                console.log(response);
-                $scope.results = response;
-                if( $scope.results.length%5 == 0){
-                    lineNumForItemsDisplay = parseInt($scope.results.length/5);
-                }else{
-                    lineNumForItemsDisplay = parseInt($scope.results.length/5) + 1;
+                //console.log(response);
+                var sellingItems = response[0].selling_designs;
+                if(sellingItems == undefined){
+                    sellingItems = []
                 }
-                $scope.itemsHeight = lineNumForItemsDisplay * (257 + 5);
+                console.log(sellingItems);
 
+                onGoingItemIDS = sellingItems;
 
+                console.log(onGoingItemIDS);
 
+                //calculate line numbers
+                if( onGoingItemIDS.length%5 == 0){
+                    lineNumForItemsDisplay = parseInt(onGoingItemIDS.length/5);
+                }else{
+                    lineNumForItemsDisplay = parseInt(onGoingItemIDS.length/5) + 1;
+                }
+                if(lineNumForItemsDisplay <= 1){
+                    $( ".ongoing-general .see-more-stuff" ).hide();
+                }else{
+                    $( ".ongoing-general .see-more-stuff" ).show();
+                    $scope.itemsHeight = lineNumForItemsDisplay * (257 + 5);
+                }
+
+                $scope.onGoingItems = [];
                 $(function (){
                         //console.log($scope.results.length);
-                        for (i = 0; i < $scope.results.length; i++){
+                        for (i = 0; i < onGoingItemIDS.length; i++){
 
-                            var strContents = $scope.results[i].img.split(' ');
-                            imgSRC = strContents[4].substring(4, strContents[4].length - 1);
+                            $http.get('/load_design_by_id/' + onGoingItemIDS[i]).
+                            success(function(response){
+                                var strContents = response.img.split(' ');
+                                imgSRC = strContents[4].substring(4, strContents[4].length - 1);
 
-                            $(".ongoing-general .items").append("<img class='item' id=' "+ $scope.results[i]._id +" ' src='" + imgSRC + " '></div>");
+                                $scope.onGoingItems.push({id: response._id, img: imgSRC});
 
+                            });
+
+                            
                         }
 
-                        $(".ongoing-general .items .item").click(function(){
-                            //alert($(this).attr("id"));
-                            var currentPath = document.URL;
-                            $window.location.href = currentPath.substring(0, currentPath.length - 21) + "design-detail.html?id=" + $(this).attr("id");;
-                        });
+                        
 
-                    });
+                });
+
+
             });
-        };
+        }
+
+        $scope.loadSoldDesigns = function(){
+            $http.get('/load_ongoing/' + $scope.currentUser._id).
+            success(function(response){
+                //console.log(response);
+
+                var soldItems = response[0].sold_designs;
+                if(soldItems == undefined){
+                    soldItems = []
+                }
+                console.log(soldItems);
+
+                historyItemIDS = soldItems;
+
+                console.log(historyItemIDS);
+
+                //calculate line numbers
+                if( historyItemIDS.length%5 == 0){
+                    lineNumForItemsDisplay = parseInt(historyItemIDS.length/5);
+                }else{
+                    lineNumForItemsDisplay = parseInt(historyItemIDS.length/5) + 1;
+                }
+                if(lineNumForItemsDisplay <= 1){
+                    $( ".history-general .see-more-stuff" ).hide();
+                }else{
+                    $( ".history-general .see-more-stuff" ).show();
+                    $scope.itemsHeight = lineNumForItemsDisplay * (257 + 5);
+                }
+                
+
+                $scope.historyItems = [];
+                $(function (){
+                        //console.log($scope.results.length);
+                        for (i = 0; i < historyItemIDS.length; i++){
+
+                            $http.get('/load_design_by_id/' + historyItemIDS[i]).
+                            success(function(response){
+                                var strContents = response.img.split(' ');
+                                imgSRC = strContents[4].substring(4, strContents[4].length - 1);
+
+                                $scope.historyItems.push({id: response._id, img: imgSRC});
+
+                            });
+
+                            
+                        }
+
+                        
+
+                });
+
+
+            });
+        }
+
+
 
 
         $scope.expandItemsOnGoing = function() {
             $(function() {
                 $( ".ongoing-general .items" ).animate({
                           height: $scope.itemsHeight
-                        }, 1000, callback);
+                        }, 500, callback);
              
                 function callback() {
                   
@@ -349,7 +608,7 @@ app.controller(
             $(function() {
                 $( ".ongoing-general .items" ).animate({
                           height: 257
-                        }, 1000, callback);
+                        }, 500, callback);
              
                 function callback() {
                   
@@ -361,6 +620,39 @@ app.controller(
             });
         }
 
+        $scope.expandItemsHistory = function() {
+            $(function() {
+                $( ".history-general .items" ).animate({
+                          height: $scope.itemsHeight
+                        }, 500, callback);
+             
+                function callback() {
+                  
+                    $(".history-general .triangle").hide();
+                    $(".history-general .see-more").text("                        ");
+                    $(".history-general .triangle-up").show();
+
+                }
+            });
+        }
+
+        $scope.collapseItemsHistory = function() {
+            $(function() {
+                $( ".history-general .items" ).animate({
+                          height: 257
+                        }, 500, callback);
+             
+                function callback() {
+                  
+                    $(".history-general .triangle").show();
+                    $(".history-general .see-more").text("See More");
+                    $(".history-general .triangle-up").hide();
+
+                }
+            });
+        }
+
+
         $scope.Home = function() {
             var currentPath = document.URL;
             $window.location.href = currentPath.substring(0, currentPath.length - 21);
@@ -370,6 +662,14 @@ app.controller(
             var currentPath = document.URL;
             $window.location.href = currentPath.substring(0, currentPath.length - 14) + "-buyer.html";
         }
+
+
+        $scope.goItem = function(id){
+            var currentPath = document.URL;
+            $window.location.href = currentPath.substring(0, currentPath.length - 21) + "design-detail.html?id=" + id;
+
+        }
+
 
         
 
@@ -393,10 +693,195 @@ app.controller(
                 if(!(currentID === undefined)){
                     $(function (){
                         $(".navigation-s .username-label-s").text(currentUsername);
+                        $scope.loadSumOfShopCart();
+                        $scope.loadBiddingDesigns();
+                        $scope.loadBoughtDesigns();
                     });
                 }
                 
         });
+
+        $scope.loadSumOfShopCart = function(){
+            $http.get('/load_shopcart_data/' + $scope.currentUser._id).
+            success(function(response){
+                $(function (){
+                    $(".shopping-cart .container .items").text(response.length);                   
+                });
+            });
+        }
+
+
+        $scope.loadBiddingDesigns = function(){
+            $http.get('/load_ongoing/' + $scope.currentUser._id).
+            success(function(response){
+                //console.log(response);
+                var biddingDesigns = response[0].bidding_designs;
+                if(biddingDesigns == undefined){
+                    biddingDesigns = []
+                }
+                console.log(biddingDesigns);
+
+                onGoingItemIDS = biddingDesigns;
+
+                console.log(onGoingItemIDS);
+
+                //calculate line numbers
+                if( onGoingItemIDS.length%5 == 0){
+                    lineNumForItemsDisplay = parseInt(onGoingItemIDS.length/5);
+                }else{
+                    lineNumForItemsDisplay = parseInt(onGoingItemIDS.length/5) + 1;
+                }
+                if(lineNumForItemsDisplay <= 1){
+                    $( ".ongoing-general .see-more-stuff" ).hide();
+                }else{
+                    $( ".ongoing-general .see-more-stuff" ).show();
+                    $scope.itemsHeight = lineNumForItemsDisplay * (257 + 5);
+                }
+
+                $scope.onGoingItems = [];
+                $(function (){
+                        //console.log($scope.results.length);
+                        for (i = 0; i < onGoingItemIDS.length; i++){
+
+                            $http.get('/load_design_by_id/' + onGoingItemIDS[i]).
+                            success(function(response){
+                                var strContents = response.img.split(' ');
+                                imgSRC = strContents[4].substring(4, strContents[4].length - 1);
+
+                                $scope.onGoingItems.push({id: response._id, img: imgSRC});
+
+                            });
+
+                            
+                        }
+
+                        
+
+                });
+
+
+            });
+        }
+
+        $scope.loadBoughtDesigns = function(){
+            $http.get('/load_ongoing/' + $scope.currentUser._id).
+            success(function(response){
+                //console.log(response);
+
+                var boughtItems = response[0].bought_designs;
+                if(boughtItems == undefined){
+                    boughtItems = []
+                }
+                console.log(boughtItems);
+
+                historyItemIDS = boughtItems;
+
+                console.log(historyItemIDS);
+
+                //calculate line numbers
+                if( historyItemIDS.length%5 == 0){
+                    lineNumForItemsDisplay = parseInt(historyItemIDS.length/5);
+                }else{
+                    lineNumForItemsDisplay = parseInt(historyItemIDS.length/5) + 1;
+                }
+                if(lineNumForItemsDisplay <= 1){
+                    $( ".history-general .see-more-stuff" ).hide();
+                }else{
+                    $( ".history-general .see-more-stuff" ).show();
+                    $scope.itemsHeight = lineNumForItemsDisplay * (257 + 5);
+                }
+                
+
+                $scope.historyItems = [];
+                $(function (){
+                        //console.log($scope.results.length);
+                        for (i = 0; i < historyItemIDS.length; i++){
+
+                            $http.get('/load_design_by_id/' + historyItemIDS[i]).
+                            success(function(response){
+                                var strContents = response.img.split(' ');
+                                imgSRC = strContents[4].substring(4, strContents[4].length - 1);
+
+                                $scope.historyItems.push({id: response._id, img: imgSRC});
+
+                            });
+
+                            
+                        }
+
+                        
+
+                });
+
+
+            });
+        }
+
+
+
+        $scope.expandItemsOnGoing = function() {
+            $(function() {
+                $( ".ongoing-general .items" ).animate({
+                          height: $scope.itemsHeight
+                        }, 500, callback);
+             
+                function callback() {
+                  
+                    $(".ongoing-general .triangle").hide();
+                    $(".ongoing-general .see-more").text("                        ");
+                    $(".ongoing-general .triangle-up").show();
+
+                }
+            });
+        }
+
+        $scope.collapseItemsOnGoing = function() {
+            $(function() {
+                $( ".ongoing-general .items" ).animate({
+                          height: 257
+                        }, 500, callback);
+             
+                function callback() {
+                  
+                    $(".ongoing-general .triangle").show();
+                    $(".ongoing-general .see-more").text("See More");
+                    $(".ongoing-general .triangle-up").hide();
+
+                }
+            });
+        }
+
+        $scope.expandItemsHistory = function() {
+            $(function() {
+                $( ".history-general .items" ).animate({
+                          height: $scope.itemsHeight
+                        }, 500, callback);
+             
+                function callback() {
+                  
+                    $(".history-general .triangle").hide();
+                    $(".history-general .see-more").text("                        ");
+                    $(".history-general .triangle-up").show();
+
+                }
+            });
+        }
+
+        $scope.collapseItemsHistory = function() {
+            $(function() {
+                $( ".history-general .items" ).animate({
+                          height: 257
+                        }, 500, callback);
+             
+                function callback() {
+                  
+                    $(".history-general .triangle").show();
+                    $(".history-general .see-more").text("See More");
+                    $(".history-general .triangle-up").hide();
+
+                }
+            });
+        }
 
         $scope.goDesignerPage = function() {
             var currentPath = document.URL;
@@ -406,6 +891,33 @@ app.controller(
             //$window.location.href = currentPath + '-designer';
         }
 
+        $scope.goShoppingCart = function(){
+            var currentPath = document.URL;
+            var query = window.location.search;
+            $window.location.href = currentPath.substring(0, currentPath.length - 18) + "shopping-cart.html";
+        }
+
+
+        $scope.Home = function() {
+            var currentPath = document.URL;
+            $window.location.href = currentPath.substring(0, currentPath.length - 18);
+        }
+
+        $scope.goItem = function(id){
+            var currentPath = document.URL;
+            $window.location.href = currentPath.substring(0, currentPath.length - 18) + "design-detail.html?id=" + id;
+
+        }
+
+        $scope.logout = function() {
+
+            $http.get("/logout")
+            .success(function(response){
+
+                var currentPath = document.URL;
+                $window.location.href = currentPath;
+            });
+        };
         
 
     }]);
@@ -429,20 +941,35 @@ app.controller(
 
                     $(function (){
                         $(".navigation-s .username-label").text(currentUsername);
-                        var query = window.location.search;
-                        $scope.currentDesignId = query.split('%20')[1];
-                        //alert(currentDesignId);
-                        $scope.getCurrentDesign($scope.currentDesignId);
+                        $(".navigation-s .shopping-cart").show();
+                        $(".navigation-s .sign-up").hide();
+                        $(".navigation-s .login").hide();
+                        $scope.loadSumOfShopCart();
+
                     });
+                }else{
+                    $(".navigation-s .username-label").hide();
+                    $(".navigation-s .sign-up").show();
+                    $(".navigation-s .login").show();
+                    $(".navigation-s .shopping-cart").hide();
                 }
                 
         });
+
+        $scope.loadSumOfShopCart = function(){
+            $http.get('/load_shopcart_data/' + $scope.currentUser._id).
+            success(function(response){
+                $(function (){
+                    $(".shopping-cart .container .items").text(response.length);                   
+                });
+            });
+        }
 
 
         $scope.getCurrentDesign = function(id){
 
 
-            $http.get('/load_current_design/' + id).
+            $http.get('/load_design_by_id/' + id).
             success(function(response){
                 var currentDesign = response;
 
@@ -451,32 +978,66 @@ app.controller(
 
                         if(currentDesign.designer == $scope.currentUser._id){
                             $('.stuff-to-hide-bidding').hide();
-                        }
 
-                        console.log(currentDesign.img);
+                        }
+                        
+                        //console.log(currentDesign.img);
                         var strContents = currentDesign.img.split(' ');
                         
                         imgSRC = strContents[4].substring(4, strContents[4].length - 1);
-                        console.log(imgSRC);
+                        //console.log(imgSRC);
                         $(".detail .preview").attr("src", imgSRC);
                         var dt = new Date(currentDesign.dt);
                         //console.log(dt);
                         dt.setHours(dt.getHours() + parseInt(currentDesign.time_left));
                         //console.log(dt);
                         $(".detail .control .time-left").text(dt);
+                        if(new Date() > new Date(dt)){
+                            $('.stuff-to-hide-bidding').hide();
+                            if(currentDesign.finally_belong_to == $scope.currentUser._id){
+                                if(currentDesign.status == "SOLD"){
+                                    $scope.hintForBidding = "You bought this Design!";
+                                }else{
+                                    $scope.hintForBidding = "Waitting For Your Payment";
+                                }
+                                
+                            }else{
+                                $scope.hintForBidding = "Bidding Closed";
+                            }
+
+                            if(currentDesign.status == "SOLD" && currentDesign.designer == $scope.currentUser._id){
+                                    $scope.hintForBidding = "You sold this Design!";
+                            }
+                        }
                         $(".detail .control .minimum").text("$ " + currentDesign.min_price);
-                        $scope.getAndSetUsernameById(currentDesign.current_winner);//it will set the current-winner ui, too
+                        $(".detail .control .name").text(currentDesign.name);
+                        $scope.getAndSetDesignernameById(currentDesign.designer);
+                        $scope.getAndSetWinnernameById(currentDesign.current_winner);//it will set the current-winner ui, too
                         //console.log($scope.currentWinner);
                         //$(".detail .control .current-winner").text($scope.currentWinner);
                         $(".detail .description p").text(currentDesign.discription);
+                        
+
+
+
+                        
 
 
 
                     });
                 }
                 
-        });
+            });
         }
+        var query = window.location.search;
+        if(query.indexOf("%20") > -1){
+            $scope.currentDesignId = query.split('%20')[1];
+        }else{
+            $scope.currentDesignId = query.split('id=')[1];           
+        }
+        
+        //alert(currentDesignId);
+        $scope.getCurrentDesign($scope.currentDesignId);
 
         $scope.bid = function(){
             $(function (){
@@ -496,9 +1057,12 @@ app.controller(
 
                     $http.put("/bid/" + $scope.currentDesignId, $scope.objToSendToBid)
                     .success(function (response) {
-                        //console.log(response);
+                        
+                        console.log(response);
                         
                         $scope.getCurrentDesign($scope.currentDesignId);
+
+                        $scope.hintForBidding = "Bid Success!"
 
                     });
                 }
@@ -506,7 +1070,7 @@ app.controller(
             
         }
 
-        $scope.getAndSetUsernameById = function(id){
+        $scope.getAndSetWinnernameById = function(id){
             $http.get('/get_username/' + id).
             success(function(response){
                     $scope.currentWinner = response;
@@ -517,6 +1081,59 @@ app.controller(
             });
         }
 
+        $scope.getAndSetDesignernameById = function(id){
+            $http.get('/get_username/' + id).
+            success(function(response){
+                    $(function (){
+                            $(".detail .control .designer").text(response);
+                    });
+                    //console.log($scope.currentWinner);
+            });
+        }
+
+
+
+        $scope.login = function () {
+            $http.post("/login", $scope.userLogin)
+            .success(function (response) {
+
+                //$location.path('/hello');
+                //$route.reload();
+
+                if(response == "loginSuccess"){
+                    $http.get('/get_current_user').
+                    success(function(response){
+                        $scope.currentUser = response;
+                        //alert($scope.currentUser.username);
+                    });
+
+                    var currentPath = document.URL;
+                    $window.location.href = currentPath;
+
+
+                }else{
+                    $scope.hintForLogin = "Username or Password not correct.";
+                }
+
+
+            });
+        };
+
+        $scope.signup = function () {
+            if($scope.userSignup.username.length < 50 && $scope.userSignup.password != $scope.cpassword){
+                $scope.hintForSignup = "The passwords you entered twice are different";
+            }else{
+
+
+                $http.post("/signup", $scope.userSignup)
+                .success(function (response) {
+
+                    //if signup success, do a login function
+                    $scope.userLogin = response;
+                    $scope.login();
+                });
+            }
+        };
 
 
         $scope.goAccount = function(){
@@ -525,7 +1142,39 @@ app.controller(
             $window.location.href = currentPath.substring(0, currentPath.length - 18 - query.length) + "account.html";
         }
 
-        
+        $scope.Home = function() {
+            var currentPath = document.URL;
+            var query = window.location.search;
+            $window.location.href = currentPath.substring(0, currentPath.length - 18 - query.length);
+        }
+
+        $scope.goShoppingCart = function(){
+            var currentPath = document.URL;
+            var query = window.location.search;
+            $window.location.href = currentPath.substring(0, currentPath.length - 18 - query.length) + "shopping-cart.html";
+        }
+
+        $scope.searchMen = function(){
+            var currentPath = document.URL;
+            var query = window.location.search;
+            $window.location.href = currentPath.substring(0, currentPath.length - 18 - query.length) + "designs-display.html?query=" + "Men";
+            //$window.location.href = currentPath + "designs-display.html?query=" + query;
+        }
+
+        $scope.searchWomen = function(){
+            var currentPath = document.URL;
+            var query = window.location.search;
+            $window.location.href = currentPath.substring(0, currentPath.length - 18 - query.length) + "designs-display.html?query=" + "Women";
+            //$window.location.href = currentPath + "designs-display.html?query=" + query;
+        }
+
+        $scope.searchUni = function(){
+            var currentPath = document.URL;
+            var query = window.location.search;
+            $window.location.href = currentPath.substring(0, currentPath.length -18 - query.length) + "designs-display.html?query=" + "Uni";
+            //$window.location.href = currentPath + "designs-display.html?query=" + query;
+        }
+
 
         
 
@@ -540,6 +1189,14 @@ app.controller(
         console.log("Hello From DesignDetailCtrl");
         //$scope.message = "Hello World From Controller";        
 
+        $(function (){
+                        $(".left-panel .category-item").click(function(){
+                            //alert($(this).attr("id"));
+                            var currentPath = document.URL;
+                            var query = window.location.search;
+                            $window.location.href = currentPath.substring(0, currentPath.length - query.length) + "?query=" + $(this).text();
+                        });
+                    });
 
         $http.get('/get_current_user').
             success(function(response){
@@ -553,14 +1210,34 @@ app.controller(
 
                     $(function (){
                         $(".navigation-s .username-label").text(currentUsername);
-                        $scope.loadDefaultDesigns();
+                        $(".navigation-s .shopping-cart").show();
+                        $(".navigation-s .sign-up").hide();
+                        $(".navigation-s .login").hide();
+                        $scope.loadSumOfShopCart();
+                        
                     });
+                }else{
+                    $(".navigation-s .username-label").hide();
+                    $(".navigation-s .shopping-cart").hide();
+                    $(".navigation-s .sign-up").show();
+                    $(".navigation-s .login").show();
                 }
                 
         });
 
+        $scope.loadSumOfShopCart = function(){
+            $http.get('/load_shopcart_data/' + $scope.currentUser._id).
+            success(function(response){
+                $(function (){
+                    $(".shopping-cart .container .items").text(response.length);                   
+                });
+            });
+        }
 
-        $scope.loadDefaultDesigns = function(id){
+        
+
+
+        $scope.loadDefaultDesigns = function(){
 
 
             $http.get('/load_designs_default').
@@ -586,33 +1263,159 @@ app.controller(
             });
         }
 
-        $scope.bid = function(){
-            $(function (){
-                var currentMin = $(".detail .control .minimum").text().substring(2);
-                var currentWinner = $(".detail .control .current-winner").text();
-                if( currentWinner == $scope.currentUser.username ){
-                    $scope.hintForBidding = "You are the curernt Winner!"
-                }else if(parseInt($scope.yourBid) > parseInt(currentMin)){
-                    //alert("success");
+        $scope.loadSearchResults = function(query){
 
-                    $scope.objToSendToBid = {userId:"", yourBid: "", currentMin: ""};
-                    $scope.objToSendToBid.userId =  $scope.currentUser._id;
-                    $scope.objToSendToBid.yourBid = $scope.yourBid;
-                    $scope.objToSendToBid.currentMin = currentMin;
-
-                    console.log($scope.objToSendToBid);
-
-                    $http.put("/bid/" + $scope.currentDesignId, $scope.objToSendToBid)
-                    .success(function (response) {
-                        //console.log(response);
-                        
-                        $scope.getCurrentDesign($scope.currentDesignId);
-
-                    });
+            $http.get('/load_search_results/' + query)
+            .success(function(response){
+                results = response;
+                if(query){
+                    var q = query.replace("%20"," ");
+                    $(".upper-part .results-of").text("\"" + q + "\"");
+                }else{
+                    $(".upper-part .results-of").text("all");
                 }
+                
+                
+                for(i=0; i< results.length; i++){
+                        console.log(results[i].name);
+                //         //console.log(designsDefault[i]);
+                //         //$(".products").append("<div class='item' id=' "+ designsDefault[i]._id +" ' style='background: " + designsDefault[i].img + " ;'></div>");
+                         var strContents = results[i].img.split(' ');
+                        
+                         imgSRC = strContents[4].substring(4, strContents[4].length - 1);
+                //         //console.log(imgSRC);
+                         $(".products").append("<img class='item' id=' "+ results[i]._id +" ' src='" + imgSRC + " '>");
+                         $(".products .item").click(function(){
+                //             //alert($(this).attr("id"));
+                             var currentPath = document.URL;
+                             $window.location.href = "design-detail.html?id=" + $(this).attr("id");;
+                         });
+                                     
+                 }
             });
-            
         }
+
+
+        $scope.loadDesignsBySex = function(query){
+
+            $http.get('/load_results_by_sex/' + query)
+            .success(function(response){
+                results = response;
+                //var q = query.replace("%20"," ");
+                $(".upper-part .results-of").text("\"" + query + "\"");
+                
+                for(i=0; i< results.length; i++){
+                        console.log(results[i].name);
+                //         //console.log(designsDefault[i]);
+                //         //$(".products").append("<div class='item' id=' "+ designsDefault[i]._id +" ' style='background: " + designsDefault[i].img + " ;'></div>");
+                         var strContents = results[i].img.split(' ');
+                        
+                         imgSRC = strContents[4].substring(4, strContents[4].length - 1);
+                //         //console.log(imgSRC);
+                         $(".products").append("<img class='item' id=' "+ results[i]._id +" ' src='" + imgSRC + " '>");
+                         $(".products .item").click(function(){
+                //             //alert($(this).attr("id"));
+                             var currentPath = document.URL;
+                             $window.location.href = "design-detail.html?id=" + $(this).attr("id");;
+                         });
+                                     
+                 }
+            });
+        }
+
+        $scope.loadDesignsByCategory = function(query){
+
+            $http.get('/load_results_by_category/' + query)
+            .success(function(response){
+                results = response;
+                //var q = query.replace("%20"," ");
+                $(".upper-part .results-of").text("\"" + query + "\"");
+                
+                for(i=0; i< results.length; i++){
+                        console.log(results[i].name);
+                //         //console.log(designsDefault[i]);
+                //         //$(".products").append("<div class='item' id=' "+ designsDefault[i]._id +" ' style='background: " + designsDefault[i].img + " ;'></div>");
+                         var strContents = results[i].img.split(' ');
+                        
+                         imgSRC = strContents[4].substring(4, strContents[4].length - 1);
+                //         //console.log(imgSRC);
+                         $(".products").append("<img class='item' id=' "+ results[i]._id +" ' src='" + imgSRC + " '>");
+                         $(".products .item").click(function(){
+                //             //alert($(this).attr("id"));
+                             var currentPath = document.URL;
+                             $window.location.href = "design-detail.html?id=" + $(this).attr("id");;
+                         });
+                                     
+                 }
+            });
+        }
+
+
+        var categories = ["Category", "Beachwear", "Coats", "Dresses", "Denim","Jackets", "Knitwear", "Lingerie", "Polo shirts", "Shirts", "Shorts", 
+        "Suits", "Sweaters and knitwear", "Trousers", "T-Shirts and vests", "Underwear and socks"];
+        
+
+        var search = window.location.search;
+
+        query = search.split('query=')[1];  
+
+        //var words = query.split('%20');   
+
+        if(!query){
+            $scope.loadDefaultDesigns();
+        }else if(query == "Men" || query == "Women" || query == "Uni"){
+
+            $scope.loadDesignsBySex(query);
+
+        }else if(categories.indexOf(query) > -1){
+            $scope.loadDesignsByCategory(query);
+        }else{
+
+            $scope.loadSearchResults(query);
+        }    
+        
+
+        $scope.login = function () {
+            $http.post("/login", $scope.userLogin)
+            .success(function (response) {
+
+                //$location.path('/hello');
+                //$route.reload();
+
+                if(response == "loginSuccess"){
+                    $http.get('/get_current_user').
+                    success(function(response){
+                        $scope.currentUser = response;
+                        //alert($scope.currentUser.username);
+                    });
+
+                    var currentPath = document.URL;
+                    $window.location.href = currentPath;
+
+
+                }else{
+                    $scope.hintForLogin = "Username or Password not correct.";
+                }
+
+
+            });
+        };
+
+        $scope.signup = function () {
+            if($scope.userSignup.username.length < 50 && $scope.userSignup.password != $scope.cpassword){
+                $scope.hintForSignup = "The passwords you entered twice are different";
+            }else{
+
+
+                $http.post("/signup", $scope.userSignup)
+                .success(function (response) {
+
+                    //if signup success, do a login function
+                    $scope.userLogin = response;
+                    $scope.login();
+                });
+            }
+        };
 
         $scope.getAndSetUsernameById = function(id){
             $http.get('/get_username/' + id).
@@ -625,14 +1428,222 @@ app.controller(
             });
         }
 
-
+        $scope.Home = function() {
+            var currentPath = document.URL;
+            $window.location.href = currentPath.substring(0, currentPath.length - 21);
+        }
 
         $scope.goAccount = function(){
             var currentPath = document.URL;
             $window.location.href = currentPath.substring(0, currentPath.length - 20) + "account.html";
         }
 
+        $scope.goShoppingCart = function(){
+            var currentPath = document.URL;
+            var query = window.location.search;
+            $window.location.href = currentPath.substring(0, currentPath.length - 20 - query.length) + "shopping-cart.html";
+        }
+
+        $scope.searchMen = function(){
+            var currentPath = document.URL;
+            var query = window.location.search;
+            $window.location.href = currentPath.substring(0, currentPath.length - query.length) + "?query=" + "Men";
+            //$window.location.href = currentPath + "designs-display.html?query=" + query;
+        }
+
+        $scope.searchWomen = function(){
+            var currentPath = document.URL;
+            var query = window.location.search;
+            $window.location.href = currentPath.substring(0, currentPath.length - query.length) + "?query=" + "Women";
+            //$window.location.href = currentPath + "designs-display.html?query=" + query;
+        }
+
+        $scope.searchUni = function(){
+            var currentPath = document.URL;
+            var query = window.location.search;
+            $window.location.href = currentPath.substring(0, currentPath.length - query.length) + "?query=" + "Uni";
+            //$window.location.href = currentPath + "designs-display.html?query=" + query;
+        }
+
         
+
+    }]);
+
+
+
+
+
+
+app.controller(
+    "ShoppingCartCtrl",  
+    [ "$scope", "$http", "$location", "$route", "$window", function ($scope, $http, $location, $route, $window ) {
+        console.log("Hello From ShoppingCartCtrl");
+        //$scope.message = "Hello World From Controller";        
+
+
+        $http.get('/get_current_user').
+            success(function(response){
+                $scope.currentUser = response;
+                var currentUsername = $scope.currentUser.username;
+                var currentID = $scope.currentUser._id;
+
+                //alert(currentID);
+                //if login success, change the look of navigation
+                if(!(currentID === undefined)){
+
+                    $(function (){
+                        $(".navigation-s .username-label").text(currentUsername);
+                        $(".navigation-s .sign-up").hide();
+                        $(".navigation-s .login").hide();
+                        $scope.loadShopCartData();
+                        
+                    });
+                }else{
+                    $(".navigation-s .username-label").hide();
+                    $(".navigation-s .sign-up").show();
+                    $(".navigation-s .login").show();
+                }
+                
+        });
+
+
+        //console.log($scope.test);
+
+
+
+        $scope.login = function () {
+            $http.post("/login", $scope.userLogin)
+            .success(function (response) {
+
+                //$location.path('/hello');
+                //$route.reload();
+
+                if(response == "loginSuccess"){
+                    $http.get('/get_current_user').
+                    success(function(response){
+                        $scope.currentUser = response;
+                        //alert($scope.currentUser.username);
+                    });
+
+                    var currentPath = document.URL;
+                    $window.location.href = currentPath;
+
+
+                }else{
+                    $scope.hintForLogin = "Username or Password not correct.";
+                }
+
+
+            });
+        };
+
+        $scope.signup = function () {
+            if($scope.userSignup.username.length < 50 && $scope.userSignup.password != $scope.cpassword){
+                $scope.hintForSignup = "The passwords you entered twice are different";
+            }else{
+
+
+                $http.post("/signup", $scope.userSignup)
+                .success(function (response) {
+
+                    //if signup success, do a login function
+                    $scope.userLogin = response;
+                    $scope.login();
+                });
+            }
+        };
+
+        $scope.loadShopCartData = function(){
+            //alert($scope.currentUser._id);
+            $http.get('/load_shopcart_data/' + $scope.currentUser._id).
+            success(function(response){ 
+                var itemsInShopCart = response;
+                $scope.shoppingCartItems = [];
+                if(itemsInShopCart.length > 0){
+
+                    for(i = 0; i < itemsInShopCart.length; i++){
+                        $http.get('/load_design_by_id/' + itemsInShopCart[i]).
+                        success(function(response){
+                            
+                            var design = response;
+                            if(!(design._id === undefined)){
+
+                                var strContents = design.img.split(' ');
+                        
+                                imgSRC = strContents[4].substring(4, strContents[4].length - 1);
+
+                                //$(".item img").attr("src", imgSRC);
+
+
+                                $http.get('/get_username/' + design.designer).
+                                success(function(response){
+                                        
+                                    $scope.shoppingCartItems.push(
+                                    {
+                                        name: design.name,                                    
+                                        designerID: design.designer,
+                                        designerName: response,
+                                        price: design.min_price,
+                                        itemID: design._id,
+                                        img: imgSRC
+                                    });
+
+                                });
+                                
+
+                            }
+                        
+                        });
+                    }
+
+                    //console.log(itemsInShopCart);
+                    //console.log(itemsInShopCart.length);
+                }             
+                
+            });           
+            
+        }
+
+        $scope.pay = function(item){
+
+            //console.log($scope.currentUser._id);
+
+
+            $http.put("/pay/" + item.itemID, { action:"confirm", buyerID: $scope.currentUser._id,  designerID: item.designerID } )
+            .success(function (response) {
+                //console.log(response);
+                if(response == "pay success"){
+                    //console.log("success");
+                    //var currentPath = document.URL;
+                    //$window.location.href = currentPath;
+                    $scope.shoppingCartItems.splice($scope.shoppingCartItems.indexOf(item), 1);
+
+                }
+            });
+
+        }
+
+
+        $scope.getAndSetUsernameById = function(id){
+            $http.get('/get_username/' + id).
+            success(function(response){
+                    $scope.currentWinner = response;
+                    $(function (){
+                            $(".detail .control .current-winner").text($scope.currentWinner);
+                    });
+                    //console.log($scope.currentWinner);
+            });
+        }
+
+        $scope.Home = function() {
+            var currentPath = document.URL;
+            $window.location.href = currentPath.substring(0, currentPath.length - 18);
+        }
+
+        $scope.goAccount = function(){
+            var currentPath = document.URL;
+            $window.location.href = currentPath.substring(0, currentPath.length - 18) + "account.html";
+        }
 
         
 

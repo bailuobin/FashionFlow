@@ -25,33 +25,35 @@
 <body ng-controller="Account-BuyerCtrl">
 
     <div class="navigation-s">
-        <div class="logo-s">
+        <div class="logo-s" ng-click="Home()">
             <img src="img/logo-s.svg" />
         </div>
         <div class="username-label-s "></div>
         <div class="designer-label-s myglow-p" ng-click="goDesignerPage()">I'm a Designer</div>
         <div class="buyer-label-s-choosen">I'm a Buyer</div>
-    </div>
-
-    <div class="ongoing-general">
-        <div class="title">On Going</div>
-        <div class="items">
-            <div class="item"></div>
-            <div class="item"></div>
-            <div class="item"></div>
-            <div class="item"></div>
-            <div class="item"></div>
+        <div class="shopping-cart" ng-click="goShoppingCart()">
+            <div class="icon col-md-4"><img src="img/shopping-purse-purple.svg"></div>
+            <div class="container col-md-6">
+                <span class="items">1</span>
+                <span> item(s)</span>
+            </div>
         </div>
     </div>
 
-    <div class="history-general">
-        <div class="title">History</div>
+    <div class="ongoing-general">
+        <div class="title">Bidding</div>
         <div class="items">
-            <div class="item"></div>
-            <div class="item"></div>
-            <div class="item"></div>
-            <div class="item"></div>
-            <div class="item"></div>
+            <img class="item" ng-attr-src="{{item.img}}" ng-repeat="item in onGoingItems" ng-click="goItem(item.id)">
+        </div>
+        <div class="title see-more see-more-stuff">See More</div>
+        <div class="title myglow-p triangle see-more-stuff" ng-click="expandItemsOnGoing()"><img src="img/triangle-purple.svg" style="width:22px;"></div>
+        <div class="title myglow-p triangle-up" ng-click="collapseItemsOnGoing()"><img src="img/triangle-purple-up.svg" style="width:22px;"></div>
+    </div>
+
+    <div class="history-general">
+        <div class="title">Bought</div>
+        <div class="items">
+             <img class="item" ng-attr-src="{{item.img}}" ng-repeat="item in historyItems" ng-click="goItem(item.id)">
         </div>
     </div>
 

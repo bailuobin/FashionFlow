@@ -25,28 +25,80 @@
 
 <body ng-controller="DesignDetailCtrl">
 
-    <div class="navigation-s">
-        <div class="logo-s">
+    <div class="navigation-s" >
+        <div class="logo-s" ng-click="Home()">
             <img src="img/logo-s.svg" />
         </div>
         
-        <div class="men-label myglow-p" ng-click="">Men</div>
-        <div class="women-label myglow-p" ng-click="">Women</div>
-        <div class="uni-label myglow-p" ng-click="">Uni</div>
+        <div class="men-label myglow-p" ng-click="searchMen()">Men</div>
+        <div class="women-label myglow-p" ng-click="searchWomen()">Women</div>
+        <div class="uni-label myglow-p" ng-click="searchUni()">Uni</div>
+        <div class="login myglow-p">Login</div>
+        <div class="sign-up myglow-p">SignUp</div>
         <div class="username-label myglow-p" ng-click="goAccount()"></div>
-        <div class="shopping-cart">
+        <div class="shopping-cart" ng-click="goShoppingCart()">
             <div class="icon col-md-4"><img src="img/shopping-purse-purple.svg"></div>
             <div class="container col-md-6">
-                <span class="items">1 item(s)</span>
-                <span class="sum">$ 100</span>
+                <span class="items">1</span>
+                <span >item(s)</span>
             </div>
         </div>
+    </div>
+
+    <!-- LOGIN DIALOG -->
+    <div id="my-login-dialog-form" title="Tell me who are you" >
+        <p class="validateTips">{{ hintForLogin }}</p>
+
+        <form class="my-login-form" action="/login" method="post">
+            <fieldset>
+                <label for="email">Username(email)</label>
+                <input type="text" name="email" id="email" value="" class="text ui-widget-content ui-corner-all" ng-model="userLogin.username">
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" value="" class="text ui-widget-content ui-corner-all" ng-model="userLogin.password">
+
+                <!-- <input type="submit" value="Login" class="my-btn-login"> -->
+                <button class="my-btn-login" ng-click="login()">Login</button>
+                
+                       
+                <!-- Allow form submission with keyboard without duplicating the dialog button -->
+                <input type="submit" tabindex="-1" style="position: absolute; top: -1000px">
+            </fieldset>
+        </form>
+    </div>
+
+
+    <!-- SIGN UP DIALOG -->
+    <div id="my-signup-dialog-form" title="Join us now">
+        <p class="validateTips">{{ hintForSignup }}</p>
+
+        <form class="my-signup-form" >
+            <fieldset>
+                <label for="email">Username(email)</label>
+                <input type="text" name="email" id="email" value="" class="text ui-widget-content ui-corner-all" ng-model="userSignup.username">
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" value="" class="text ui-widget-content ui-corner-all" ng-model="userSignup.password">
+                <label for="password">Confirm Password</label>
+                <input type="password" name="c-password" id="c-password" value="" class="text ui-widget-content ui-corner-all" ng-model="cpassword">
+
+                <button class="my-btn-signup" ng-click="signup()">Submit</button>
+                       
+                <!-- Allow form submission with keyboard without duplicating the dialog button -->
+                <input type="submit" tabindex="-1" style="position: absolute; top: -1000px">
+            </fieldset>
+        </form>
     </div>
 
     <div class="detail">
         
         <img class="preview col-md-4" src="">
         <div class="control col-md-6">
+            <div class="row-container col-md-12">
+               <div class="name">name</div>
+            </div>
+            <div class="row-container col-md-12">
+                <h1>Designed by: </h1>
+                <div class="designer">designer</div>
+            </div>
             <div class="row-container col-md-12">
                 <h1>Ends at: </h1>
                 <div class="time-left"></div>
@@ -63,11 +115,11 @@
                 
             </div>
             <div class="row-container col-md-12 stuff-to-hide-bidding">
-                <h1 >Your bid: </h1>
+                <h1 class="">Your bid: </h1>
                 <input type="text" class="your-bid form-control text ui-widget-content ui-corner-all " ng-model="yourBid">
             </div>
-            <div class="row-container col-md-12 stuff-to-hide-bidding">
-                <div class="bid-btn myglow-p-box col-md-6" ng-click="bid()">Bid Now</div>
+            <div class="row-container col-md-12 ">
+                <div class="bid-btn myglow-p-box col-md-6 stuff-to-hide-bidding" ng-click="bid()">Bid Now</div>
                 <div class="hint col-md-6" >{{hintForBidding}}</div>
             </div>
         </div>

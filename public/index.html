@@ -41,7 +41,24 @@
                     <p>we change the definition of fashion”</p>
                 </div>
             </div>
-            <div class="search"></div>
+            <div class="search myglow">Search</div>
+            <script>
+              $(function() {
+                var state = true;
+                $( ".navigation .search" ).click(function() {
+                  if ( state ) {
+                    $( ".my-search" ).animate({
+                      height: 121
+                    }, 400 );
+                  } else {
+                    $( ".my-search" ).animate({
+                      height: 0
+                    }, 400 );
+                  }
+                  state = !state;
+                });
+              });
+            </script>
         </div>
     </div>
 
@@ -88,8 +105,23 @@
         </form>
     </div>
 
+    <div class="my-search">
+
+        <form class="my-search-form" method="post">
+            <fieldset class="search-field-set">
+                <input type="text" class="col-md-10 my-search-input text ui-widget-content ui-corner-all" ng-model="searchQuery">
+                
+                <button class="col-md-1 my-btn-search" ng-click="goSearch()">Search</button>
+                                     
+                <!-- Allow form submission with keyboard without duplicating the dialog button -->
+                <input type="submit" tabindex="-1" style="position: absolute; top: -1000px">
+            </fieldset>
+        </form>
+
+    </div>
     
     <div class="recent-products">
+        <div style="margin: 20px;font-size: 30px;color: #946EA7;">Recent Fashion Flow</div>
 
     </div>
 

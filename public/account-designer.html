@@ -41,10 +41,10 @@
         <div class="title">Selling</div>
         <div class="title upload myglow-p">Upload</div>       
         <div class="items">
-            
+            <img class="item" ng-attr-src="{{item.img}}" ng-repeat="item in onGoingItems" ng-click="goItem(item.id)">
         </div>
-        <div class="title see-more">See More</div>
-        <div class="title myglow-p triangle" ng-click="expandItemsOnGoing()"><img src="img/triangle-purple.svg" style="width:22px;"></div>
+        <div class="title see-more see-more-stuff">See More</div>
+        <div class="title myglow-p triangle see-more-stuff" ng-click="expandItemsOnGoing()"><img src="img/triangle-purple.svg" style="width:22px;"></div>
         <div class="title myglow-p triangle-up" ng-click="collapseItemsOnGoing()"><img src="img/triangle-purple-up.svg" style="width:22px;"></div>
     </div>
 
@@ -235,15 +235,12 @@
 
 
     <div class="history-general">
-        <div class="title">History</div>
+        <div class="title">Sold</div>
         <div class="items">
-            <div class="row">
-            </div>
-
-            
+            <img class="item" ng-attr-src="{{item.img}}" ng-repeat="item in historyItems" ng-click="goItem(item.id)">
         </div>
-        <div class="title see-more">See More</div>
-        <div class="title myglow-p triangle" ng-click="expandItemsHistory()"><img src="img/triangle-purple.svg" style="width:22px;"></div>
+        <div class="title see-more see-more-stuff">See More</div>
+        <div class="title myglow-p triangle see-more-stuff" ng-click="expandItemsHistory()"><img src="img/triangle-purple.svg" style="width:22px;"></div>
         <div class="title myglow-p triangle-up" ng-click="collapseItemsHistory()"><img src="img/triangle-purple-up.svg" style="width:22px;"></div>
     </div>
 
