@@ -340,8 +340,13 @@ app.get("/load_design_by_id/:id", function (req, res) {
 
         designItemCollection.findOne({ _id: mongojs.ObjectId(id)},
             function (err, doc) {
-                console.log(err);
-                res.json(doc);
+                if(err){
+                  res.send(err);
+                }else{
+                  res.json(doc);
+                }
+                
+                
             });
     });
 

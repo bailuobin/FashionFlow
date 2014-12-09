@@ -46,13 +46,15 @@ app.controller(
                         $http.get('/load_design_by_id/' + recentDesigns[i]).
                         success(function(response){
 
-                            
-
-                            var strContents = response.img.split(' ');
+                            if(!response.err){
+                                var strContents = response.img.split(' ');
                         
-                            imgSRC = strContents[4].substring(4, strContents[4].length - 1);
+                                imgSRC = strContents[4].substring(4, strContents[4].length - 1);
 
-                            $scope.recentDesigns.push({ id: response._id , img: imgSRC , name:response.name});
+                                $scope.recentDesigns.push({ id: response._id , img: imgSRC , name:response.name});
+                            }
+
+                            
 
 
                            
