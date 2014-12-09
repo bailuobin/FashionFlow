@@ -1022,6 +1022,7 @@ app.controller(
             $http.get('/load_design_by_id/' + id).
             success(function(response){
                 var currentDesign = response;
+                $scope.currentDesign = currentDesign;
 
                 if(!(currentDesign._id === undefined)){
                     $(function (){
@@ -1069,6 +1070,8 @@ app.controller(
 
                             if(currentDesign.status == "SOLD" && currentDesign.designer == $scope.currentUser._id){
                                     $scope.hintForBidding = "You sold this Design!";
+                            }else if(currentDesign.status == "SOLD" && currentDesign.designer != $scope.currentUser._id){
+                                    $scope.hintForBidding = "Someone already got the copyright of this design!";
                             }
                         }
                         $(".detail .control .minimum").text("$ " + currentDesign.min_price);
@@ -1117,6 +1120,9 @@ app.controller(
                     $scope.objToSendToBid.userId =  $scope.currentUser._id;
                     $scope.objToSendToBid.yourBid = $scope.yourBid;
                     $scope.objToSendToBid.currentMin = currentMin;
+                    if($scope.currentDesign.current_winner){// the current design is bid by someone before
+                        $scope.objToSendToBid.currentWinner = $scope.currentDesign.current_winner;
+                    }
 
                     console.log($scope.objToSendToBid);
 

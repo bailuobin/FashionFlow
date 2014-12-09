@@ -365,7 +365,7 @@ app.put("/bid/:design_id", function (req, res) {
         new: true
     },
         function (err, doc) {
-          console.log(doc);
+          //console.log(doc);
           res.json(doc);
     });
 
@@ -374,6 +374,15 @@ app.put("/bid/:design_id", function (req, res) {
        { $addToSet: { bidding_designs: mongojs.ObjectId(id) } },
        { upsert: true}
     );
+
+    if(req.body.currentWinner){// if a former winner exists, remove this design from his bidding list
+      usersCollection.update(
+       { _id: mongojs.ObjectId(req.body.currentWinner)},
+       { $pull: { bidding_designs: mongojs.ObjectId(id) } },
+       { upsert: true}
+    );
+    }
+    
 
 });
 
