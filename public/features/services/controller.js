@@ -127,9 +127,16 @@ app.controller(
         }
 
         $scope.signup = function () {
+
+            emailRegex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+
             if(!$scope.userSignup || !$scope.userSignup.username || !$scope.userSignup.password||  !$scope.cpassword ){
                 $scope.hintForSignup = "All fields need to be filled";
-            }else if($scope.userSignup.username.length < 50 && $scope.userSignup.password != $scope.cpassword ){
+            }else if($scope.userSignup.username.length > 50){
+                $scope.hintForSignup = "Username should be shorter than 50 characters";
+            }else if(!emailRegex.test($scope.userSignup.username)){
+                $scope.hintForSignup = "Your username should be an valid email address";
+            }else if( $scope.userSignup.password != $scope.cpassword ){
                 $scope.hintForSignup = "The passwords you entered twice are different";
             }else{
 
@@ -140,7 +147,9 @@ app.controller(
                     if(response.err){
                         $scope.hintForSignup = "The username already exists. Please choose another one."
                     }else{
-                        console.log(response);
+                        //console.log(response);
+                        $scope.userLogin = response;
+                        $scope.login();
                     }
                     //if signup success, do a login function
                     //$scope.userLogin = response;
@@ -1185,9 +1194,16 @@ app.controller(
         };
 
         $scope.signup = function () {
+
+            emailRegex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+
             if(!$scope.userSignup || !$scope.userSignup.username || !$scope.userSignup.password||  !$scope.cpassword ){
                 $scope.hintForSignup = "All fields need to be filled";
-            }else if($scope.userSignup.username.length < 50 && $scope.userSignup.password != $scope.cpassword ){
+            }else if($scope.userSignup.username.length > 50){
+                $scope.hintForSignup = "Username should be shorter than 50 characters";
+            }else if(!emailRegex.test($scope.userSignup.username)){
+                $scope.hintForSignup = "Your username should be an valid email address";
+            }else if( $scope.userSignup.password != $scope.cpassword ){
                 $scope.hintForSignup = "The passwords you entered twice are different";
             }else{
 
@@ -1198,7 +1214,9 @@ app.controller(
                     if(response.err){
                         $scope.hintForSignup = "The username already exists. Please choose another one."
                     }else{
-                        console.log(response);
+                        //console.log(response);
+                        $scope.userLogin = response;
+                        $scope.login();
                     }
                     //if signup success, do a login function
                     //$scope.userLogin = response;
@@ -1207,6 +1225,8 @@ app.controller(
             }
         };
 
+
+        
         $scope.goAccount = function(){
             var currentPath = document.URL;
             var query = window.location.search;
@@ -1496,9 +1516,16 @@ app.controller(
         };
 
         $scope.signup = function () {
+
+            emailRegex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+
             if(!$scope.userSignup || !$scope.userSignup.username || !$scope.userSignup.password||  !$scope.cpassword ){
                 $scope.hintForSignup = "All fields need to be filled";
-            }else if($scope.userSignup.username.length < 50 && $scope.userSignup.password != $scope.cpassword ){
+            }else if($scope.userSignup.username.length > 50){
+                $scope.hintForSignup = "Username should be shorter than 50 characters";
+            }else if(!emailRegex.test($scope.userSignup.username)){
+                $scope.hintForSignup = "Your username should be an valid email address";
+            }else if( $scope.userSignup.password != $scope.cpassword ){
                 $scope.hintForSignup = "The passwords you entered twice are different";
             }else{
 
@@ -1509,7 +1536,9 @@ app.controller(
                     if(response.err){
                         $scope.hintForSignup = "The username already exists. Please choose another one."
                     }else{
-                        console.log(response);
+                        //console.log(response);
+                        $scope.userLogin = response;
+                        $scope.login();
                     }
                     //if signup success, do a login function
                     //$scope.userLogin = response;
