@@ -1255,7 +1255,7 @@ app.controller(
 app.controller(
     "DesignsDisplayCtrl",  
     [ "$scope", "$http", "$location", "$route", "$window", function ($scope, $http, $location, $route, $window ) {
-        console.log("Hello From DesignDetailCtrl");
+        console.log("Hello From DesignsDisplayCtrl");
         //$scope.message = "Hello World From Controller";        
 
         $(function (){
@@ -1377,21 +1377,18 @@ app.controller(
                     $(".upper-part .results-of").text("all");
                 }
                 
-                
+                $scope.resultsDesigns = [];
+
                 for(i=0; i< results.length; i++){
-                        console.log(results[i].name);
+                        //console.log(results[i].name);
                 //         //console.log(designsDefault[i]);
                 //         //$(".products").append("<div class='item' id=' "+ designsDefault[i]._id +" ' style='background: " + designsDefault[i].img + " ;'></div>");
                          var strContents = results[i].img.split(' ');
                         
                          imgSRC = strContents[4].substring(4, strContents[4].length - 1);
-                //         //console.log(imgSRC);
-                         $(".products").append("<img class='item' id=' "+ results[i]._id +" ' src='" + imgSRC + " '>");
-                         $(".products .item").click(function(){
-                //             //alert($(this).attr("id"));
-                             var currentPath = document.URL;
-                             $window.location.href = "design-detail.html?id=" + $(this).attr("id");;
-                         });
+
+                         $scope.resultsDesigns.push({ id: results[i]._id , img: imgSRC , name : results[i].name});
+
                                      
                  }
             });
@@ -1406,20 +1403,17 @@ app.controller(
                 //var q = query.replace("%20"," ");
                 $(".upper-part .results-of").text("\"" + query + "\"");
                 
+                $scope.resultsDesigns = [];
                 for(i=0; i< results.length; i++){
-                        console.log(results[i].name);
+                        //console.log(results[i].name);
                 //         //console.log(designsDefault[i]);
                 //         //$(".products").append("<div class='item' id=' "+ designsDefault[i]._id +" ' style='background: " + designsDefault[i].img + " ;'></div>");
                          var strContents = results[i].img.split(' ');
                         
                          imgSRC = strContents[4].substring(4, strContents[4].length - 1);
+
+                         $scope.resultsDesigns.push({ id: results[i]._id , img: imgSRC , name : results[i].name});
                 //         //console.log(imgSRC);
-                         $(".products").append("<img class='item' id=' "+ results[i]._id +" ' src='" + imgSRC + " '>");
-                         $(".products .item").click(function(){
-                //             //alert($(this).attr("id"));
-                             var currentPath = document.URL;
-                             $window.location.href = "design-detail.html?id=" + $(this).attr("id");;
-                         });
                                      
                  }
             });
@@ -1433,20 +1427,16 @@ app.controller(
                 //var q = query.replace("%20"," ");
                 $(".upper-part .results-of").text("\"" + query + "\"");
                 
+                $scope.resultsDesigns = [];
                 for(i=0; i< results.length; i++){
-                        console.log(results[i].name);
+                //       console.log(results[i].name);
                 //         //console.log(designsDefault[i]);
                 //         //$(".products").append("<div class='item' id=' "+ designsDefault[i]._id +" ' style='background: " + designsDefault[i].img + " ;'></div>");
                          var strContents = results[i].img.split(' ');
                         
                          imgSRC = strContents[4].substring(4, strContents[4].length - 1);
-                //         //console.log(imgSRC);
-                         $(".products").append("<img class='item' id=' "+ results[i]._id +" ' src='" + imgSRC + " '>");
-                         $(".products .item").click(function(){
-                //             //alert($(this).attr("id"));
-                             var currentPath = document.URL;
-                             $window.location.href = "design-detail.html?id=" + $(this).attr("id");;
-                         });
+
+                         $scope.resultsDesigns.push({ id: results[i]._id , img: imgSRC , name : results[i].name});
                                      
                  }
             });

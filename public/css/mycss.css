@@ -19,8 +19,7 @@
 @font-face {
     font-family: 'HelveticaNeueUltLt';
     src: 
-    url('../fonts/HelveticaNeueLTPro-UltLt.eot'), 
-    url('../fonts/HelveticaNeueLTPro-UltLt.woff'), 
+    url('../fonts/HelveticaNeueLTPro-UltLt.eot'),  
     url('../fonts/HelveticaNeueLTPro-UltLt.otf'), 
     url('../fonts/HelveticaNeueLTPro-UltLt.ttf');
 }
