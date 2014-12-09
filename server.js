@@ -315,13 +315,15 @@ app.post("/upload", function (req, res) {
                { upsert: true}
             );
 
+            usersCollection.update(
+               { _id: mongojs.ObjectId(req.body.designer)},
+               { $addToSet: { selling_designs: req.body._id } },
+               { upsert: true}
+            );
+
         });
 
-        usersCollection.update(
-           { _id: mongojs.ObjectId(req.body.designer)},
-           { $addToSet: { selling_designs: req.body._id } },
-           { upsert: true}
-        );
+        
 
     });
 
@@ -391,8 +393,11 @@ app.get("/load_recent_designs", function (req, res) {
     mostRecentDesignsCollection.find(
       {name : "recent_designs"}, 
       function (err, doc){
-
-          res.json(doc[0].designs);
+          if(err){
+            res.send(err);
+          }else{
+            res.json(doc[0].designs);
+          }
 
       });
 });

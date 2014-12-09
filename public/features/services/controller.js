@@ -1330,36 +1330,26 @@ app.controller(
             $http.get('/load_recent_designs').
             success(function(response){
 
-                var recentDesigns = response;
-                //console.log(recentDesigns);
-                $scope.recentDesigns = [];
+                if(!response.err){
+                    var recentDesigns = response;
+                    //console.log(recentDesigns);
+                    $scope.recentDesigns = [];
 
-                for(i=0; i< recentDesigns.length; i++){
+                    for(i=0; i< recentDesigns.length; i++){
+                        if(i <= 8){
+                            //console.log(recentDesigns[i]);
+                            $http.get('/load_design_by_id/' + recentDesigns[i]).
+                            success(function(response){
 
-                    if(i <= 8){
-                        //console.log(recentDesigns[i]);
-                        $http.get('/load_design_by_id/' + recentDesigns[i]).
-                        success(function(response){
-
+                                var strContents = response.img.split(' ');
                             
+                                imgSRC = strContents[4].substring(4, strContents[4].length - 1);
 
-                            var strContents = response.img.split(' ');
-                        
-                            imgSRC = strContents[4].substring(4, strContents[4].length - 1);
-
-                            $scope.recentDesigns.push({ id: response._id , img: imgSRC , name : response.name});
-
-
-                           
-
-
-                            
-
-                        });
+                                $scope.recentDesigns.push({ id: response._id , img: imgSRC , name : response.name});
+                            });
+                        }                   
                     }
-                    
-                }
-                              
+                }                              
             });
         }
 
