@@ -340,7 +340,8 @@ app.get("/load_selling_designs/:id", function (req, res) {
 app.get("/load_design_by_id/:id", function (req, res) {
         var id = req.params.id;
 
-        designItemCollection.findOne({ _id: mongojs.ObjectId(id)},
+        designItemCollection.findOne(
+          { _id: mongojs.ObjectId(id)},
             function (err, doc) {
                 if(err){
                   res.send(err);
