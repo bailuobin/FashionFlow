@@ -8,10 +8,12 @@
 
 <title>FashionFlow</title>
 <link href="css/bootstrap.css" rel="stylesheet" media="all"/>
+
 <script src="js/angular.min.js"></script>
 <script src="js/angular-route.min.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.2/themes/smoothness/jquery-ui.css">
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
 
 
@@ -88,9 +90,25 @@
         </form>
     </div>
 
+    <!-- SIGN UP DIALOG -->
+    <div id="my-api-dialog" title="Probably Future Products">
+        <p>{{apiHint}}</p>
+        <img class='item' ng-attr-src="{{item}}" ng-repeat="item in apiResults">
+        
+    </div>
+
     <div class="detail">
         
-        <img class="preview col-md-4" src="">
+        <div class="preview-container col-md-4">
+            <img class="preview" src="">
+            <div class="glimpse myglow-p" data-toggle="tooltip" data-placement="bottom" title="Preview what could be produced based on this Design" ng-click="getDataFromAPI()">Glimpse</div>
+            <script>
+                $(function () {
+                  $('[data-toggle="tooltip"]').tooltip()
+                })
+            </script>
+        </div> 
+        
         <div class="control col-md-6">
             <div class="row-container col-md-12">
                <div class="name">name</div>

@@ -1263,7 +1263,56 @@ app.controller(
             //$window.location.href = currentPath + "designs-display.html?query=" + query;
         }
 
+        $scope.getDataFromAPI = function(){
 
+            var filters = $scope.currentDesign.category+ "+" +$scope.currentDesign.sex+ "+";
+            var words = $scope.currentDesign.name.split(' ');
+
+            for(i in words){
+                if(i == words.length - 1){
+                    filters += words[i];
+                }else{
+                    filters += words[i] + "+";
+                }
+                
+            }
+
+            console.log(filters);
+
+            $http.get('http://api.shopstyle.com/api/v2/products', 
+                { 
+                    params: { 
+                        pid: "uid8969-26266187-18", 
+                        fts: filters, 
+                        offset: "0",
+                        limit:"10" } })
+            
+            .success(function (data) {
+                console.log(data);
+                $scope.apiResults = [];
+
+                if(data.products.length > 0){
+                    for(i = 0; i < 10; i++){
+                        console.log(data.products[i].image.sizes.Best.url);
+                        var url = data.products[i].image.sizes.Best.url;
+                        
+                        if(!($scope.apiResults.indexOf(url) > -1)){
+                            $scope.apiResults[$scope.apiResults.length] = url;
+                        }
+                        
+                        
+                    
+                    }
+                }else{
+                    $scope.apiHint = "No related products found";
+                }
+                
+
+            })
+            .error(function (e) {
+                console.log(e);
+            });
+        }
         
 
     }]);

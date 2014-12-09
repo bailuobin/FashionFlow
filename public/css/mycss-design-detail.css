@@ -72,6 +72,10 @@ padding-top: 50px;
 padding-left: 100px;
 }
 
+.detail .preview-container{
+text-align: center;
+}
+
 .detail .preview{
 background: #cccccc;
 background-size: cover;
@@ -79,6 +83,13 @@ border-radius: 3px;
 width: 400px;
 height: 400px;
 padding: 0px;
+}
+
+.detail .glimpse{
+margin-top: 30px;
+font-size: 30px;
+color: #946EA7;
+cursor: pointer;
 }
 
 .detail .control{
@@ -172,6 +183,12 @@ padding-right: 40px;
 font-size: 20px;
 }
 
+#my-api-dialog{
+text-align: center;
+}
+#my-api-dialog img{
+display: block;
+}
 
 /******************************************RESPONSIVE PART********************************************/
 @media only screen and (max-width: 1248px) {
@@ -192,6 +209,8 @@ padding-left: 0px;
 .detail .preview {
 float: none;
 }
+
+
 
 .detail .control {
 float: none;
