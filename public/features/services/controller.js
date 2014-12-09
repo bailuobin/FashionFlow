@@ -50,7 +50,27 @@ app.controller(
                                 
                                     imgSRC = strContents[4].substring(4, strContents[4].length - 1);
 
-                                    $scope.recentDesigns.push({ id: response._id , img: imgSRC , name : response.name});
+                                    fixedStatus = "";
+                                    switch (response.status){
+                                        case "ON_GOING":
+                                            fixedStatus = "Open For Bidding"
+                                            break;
+                                        case "WAIT_FOR_PAYMENT":
+                                            fixedStatus = "Wait For Payment"
+                                            break;
+                                        case "SOLD":
+                                            fixedStatus = "Already Sold"
+                                            break;
+                                        case "NO_ONE_BID":
+                                            fixedStatus = "Closed"
+                                            break;
+                                        default:
+                                            fixedStatus = "Default"
+                                            break;
+
+                                    }
+
+                                    $scope.recentDesigns.push({ id: response._id , img: imgSRC , name : response.name, status: fixedStatus});
                                 }
                             });
                         }                   
@@ -1389,8 +1409,27 @@ app.controller(
                         
                         imgSRC = strContents[4].substring(4, strContents[4].length - 1);
                         //console.log(imgSRC);
+                        fixedStatus = "";
+                        switch (designsDefault[i].status){
+                            case "ON_GOING":
+                                fixedStatus = "Open For Bidding"
+                                break;
+                            case "WAIT_FOR_PAYMENT":
+                                fixedStatus = "Wait For Payment"
+                                break;
+                            case "SOLD":
+                                fixedStatus = "Already Sold"
+                                break;
+                            case "NO_ONE_BID":
+                                fixedStatus = "Closed"
+                                break;
+                            default:
+                                fixedStatus = "Default"
+                                break;
 
-                        $scope.resultsDesigns.push({ id: designsDefault[i]._id , img: imgSRC , name:designsDefault[i].name});
+                        }
+
+                        $scope.resultsDesigns.push({ id: designsDefault[i]._id , img: imgSRC , name:designsDefault[i].name, status: fixedStatus});
                         
                                      
                 }
@@ -1419,7 +1458,26 @@ app.controller(
                         
                          imgSRC = strContents[4].substring(4, strContents[4].length - 1);
 
-                         $scope.resultsDesigns.push({ id: results[i]._id , img: imgSRC , name : results[i].name});
+                         fixedStatus = "";
+                        switch (results[i].status){
+                            case "ON_GOING":
+                                fixedStatus = "Open For Bidding"
+                                break;
+                            case "WAIT_FOR_PAYMENT":
+                                fixedStatus = "Wait For Payment"
+                                break;
+                            case "SOLD":
+                                fixedStatus = "Already Sold"
+                                break;
+                            case "NO_ONE_BID":
+                                fixedStatus = "Closed"
+                                break;
+                            default:
+                                fixedStatus = "Default"
+                                break;
+
+                        }
+                         $scope.resultsDesigns.push({ id: results[i]._id , img: imgSRC , name : results[i].name, status: fixedStatus});
 
                                      
                  }
@@ -1444,7 +1502,27 @@ app.controller(
                         
                          imgSRC = strContents[4].substring(4, strContents[4].length - 1);
 
-                         $scope.resultsDesigns.push({ id: results[i]._id , img: imgSRC , name : results[i].name});
+                        fixedStatus = "";
+                        switch (results[i].status){
+                            case "ON_GOING":
+                                fixedStatus = "Open For Bidding"
+                                break;
+                            case "WAIT_FOR_PAYMENT":
+                                fixedStatus = "Wait For Payment"
+                                break;
+                            case "SOLD":
+                                fixedStatus = "Already Sold"
+                                break;
+                            case "NO_ONE_BID":
+                                fixedStatus = "Closed"
+                                break;
+                            default:
+                                fixedStatus = "Default"
+                                break;
+
+                        }
+
+                         $scope.resultsDesigns.push({ id: results[i]._id , img: imgSRC , name : results[i].name, status: fixedStatus});
                 //         //console.log(imgSRC);
                                      
                  }
@@ -1466,9 +1544,28 @@ app.controller(
                 //         //$(".products").append("<div class='item' id=' "+ designsDefault[i]._id +" ' style='background: " + designsDefault[i].img + " ;'></div>");
                          var strContents = results[i].img.split(' ');
                         
-                         imgSRC = strContents[4].substring(4, strContents[4].length - 1);
+                        imgSRC = strContents[4].substring(4, strContents[4].length - 1);
+                        fixedStatus = "";
+                        switch (results[i].status){
+                            case "ON_GOING":
+                                fixedStatus = "Open For Bidding"
+                                break;
+                            case "WAIT_FOR_PAYMENT":
+                                fixedStatus = "Wait For Payment"
+                                break;
+                            case "SOLD":
+                                fixedStatus = "Already Sold"
+                                break;
+                            case "NO_ONE_BID":
+                                fixedStatus = "Closed"
+                                break;
+                            default:
+                                fixedStatus = "Default"
+                                break;
 
-                         $scope.resultsDesigns.push({ id: results[i]._id , img: imgSRC , name : results[i].name});
+                        }
+
+                         $scope.resultsDesigns.push({ id: results[i]._id , img: imgSRC , name : results[i].name, status: fixedStatus});
                                      
                  }
             });

@@ -218,7 +218,8 @@ margin: 0px;
 text-align: left;
 margin-left: auto;
 margin-right: auto;
-margin-top: 50px;
+margin-top: 0px;
+display: inline-block;
 }
 
 .detail .description {
@@ -228,5 +229,26 @@ padding-right: 200px;
 }
 
 
+
+}
+
+
+
+
+/******************************************RESPONSIVE PART********************************************/
+@media only screen and (max-width: 1094px) {
+.detail .glimpse {
+display: block;
+}
+
+.detail .preview-container {
+width: 100%;
+}
+
+.detail .control {
+
+margin-top: 40px;
+
+}
 
 }

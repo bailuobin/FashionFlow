@@ -156,6 +156,11 @@ font-size: 54px;
 padding-top: 60px;
 }
 
+.products .item-cover h4{
+color: #ffffff;
+padding-top: 40px;
+}
+
 
 /******************************************RESPONSIVE PART********************************************/
 @media only screen and (max-width: 1227px) {
