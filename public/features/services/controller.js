@@ -232,6 +232,7 @@ app.controller(
 
                     $scope.designItem.img = $('.image-choosen .image-choosen-preview').css('background');
                     $scope.designItem.designer = $scope.currentUser._id;
+                    $scope.designItem.designer_username = $scope.currentUser.username;
                     
 
                     var dt = new Date();
@@ -1226,7 +1227,7 @@ app.controller(
         };
 
 
-        
+
         $scope.goAccount = function(){
             var currentPath = document.URL;
             var query = window.location.search;
